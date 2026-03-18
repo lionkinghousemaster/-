@@ -167,18 +167,12 @@
         .share-hero-label { font-size: 0.85rem; color: #aaa; margin-bottom: 8px; display: block; }
         .share-hero-val { font-size: 2.2rem; font-weight: 800; color: #d4af37; text-shadow: 0 2px 10px rgba(212, 175, 55, 0.2); }
         
-        /* 圖卡內的明細區塊 */
-        .share-detail-box {
-            background: rgba(255,255,255,0.03); border-radius: 12px; padding: 15px;
-            margin-bottom: 15px; text-align: left;
-        }
+        .share-detail-box { background: rgba(255,255,255,0.03); border-radius: 12px; padding: 15px; margin-bottom: 15px; text-align: left; }
         .share-detail-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; font-size: 0.9rem; border-bottom: 1px dashed rgba(255,255,255,0.1); }
         .share-detail-row:last-child { border-bottom: none; }
         .share-detail-label { color: #888; }
         .share-detail-val { font-weight: 600; color: #eee; }
-        .share-detail-sub { font-size: 0.7rem; color: #666; display: block; margin-top: 2px; }
 
-        /* 圖卡底層 */
         .share-footer { background: #000; padding: 15px 25px; display: flex; align-items: center; gap: 15px; border-top: 1px solid #222; }
         .share-avatar { width: 45px; height: 45px; border-radius: 50%; border: 2px solid #d4af37; object-fit: cover; }
         .share-info { text-align: left; flex: 1; }
@@ -285,7 +279,6 @@
             </div>
 
             <div class="grid">
-                <!-- Mode 1: Budget Inputs -->
                 <div id="inputGroupBudget">
                     <div class="form-group">
                         <label><span>手頭自備款 (萬)</span> <span style="font-size:0.7rem; color:#888; font-weight:normal;">(已預留5%雜支)</span></label>
@@ -294,7 +287,6 @@
                     <div class="form-group" style="margin-top:15px;"><label>每月還款預算 (萬)</label><input type="number" id="mP" placeholder="例：3.5" oninput="autoSave()"></div>
                 </div>
 
-                <!-- Mode 2: Target Price Inputs -->
                 <div id="inputGroupTarget" style="display:none;">
                     <div class="form-group">
                         <label><span>目標房屋總價 (萬)</span></label>
@@ -302,7 +294,6 @@
                     </div>
                 </div>
 
-                <!-- Shared Inputs -->
                 <div style="border-top:1px dashed #eee; margin-top:5px; padding-top:15px;"></div>
                 <div class="form-group"><label>房貸利率 (%)</label>
                     <select id="rateSelect" onchange="updateRateInput(); autoSave()">
@@ -406,17 +397,18 @@
         </div>
     </div>
 
-    <!-- 個人設定 -->
+    <!-- 個人設定 V18 修復版 -->
     <div id="tab-settings" class="tab-content">
         <div class="card">
             <h2><div class="h2-left">👤 個人品牌設定</div></h2>
-            <div style="text-align:center; margin:20px 0;">
-                <div class="share-avatar" style="width:100px; height:100px; margin:0 auto; overflow:hidden; border-radius:50%; border:3px solid var(--gold); position:relative; background:#f0f0f0;" onclick="document.getElementById('profileImgInput').click()">
-                    <img id="profilePreview" src="image_24505e.png" style="width:100%; height:100%; object-fit:cover;">
-                    <div id="profilePlaceholder" style="position:absolute; bottom:0; width:100%; background:rgba(0,0,0,0.5); color:white; font-size:0.7rem; padding:3px;">點擊更換</div>
+            <div style="text-align:center; margin:25px 0;">
+                <!-- 修改為 120px，並強制置中對齊 -->
+                <div class="share-avatar" style="width:120px; height:120px; margin:0 auto; overflow:hidden; border-radius:50%; border:3px solid var(--gold); position:relative; background:#f0f0f0; cursor:pointer;" onclick="document.getElementById('profileImgInput').click()">
+                    <img id="profilePreview" src="image_24505e.png" style="width:100%; height:100%; object-fit:cover; position:absolute; top:0; left:0;">
+                    <div id="profilePlaceholder" style="position:absolute; bottom:0; left:0; width:100%; background:rgba(0,0,0,0.6); color:white; font-size:0.75rem; padding:4px 0; text-align:center; pointer-events:none;">點擊更換</div>
                 </div>
                 <input type="file" id="profileImgInput" accept="image/*" style="display:none;" onchange="handleProfileUpload(this)">
-                <div style="font-size:0.8rem; color:#999; margin-top:10px;">照片將顯示於分享圖卡中</div>
+                <div style="font-size:0.85rem; color:#999; margin-top:12px;">點擊上方圖片以更換<br>大頭貼將顯示於分享圖卡中</div>
             </div>
 
             <div class="grid">
@@ -426,7 +418,8 @@
             </div>
             
             <div class="btn-group">
-                <button onclick="saveProfile()" class="btn-main" style="color:var(--primary); border-color:var(--primary);">💾 儲存設定</button>
+                <!-- 修正按鈕樣式，確保在任何裝置都清晰可見 -->
+                <button onclick="saveProfile()" class="btn-main" style="background: var(--gold-gradient); color: #fff; border: none; box-shadow: 0 4px 15px rgba(197, 160, 89, 0.4);">💾 儲存設定</button>
                 <button onclick="clearProfile()" class="btn-outline" style="color:#ef4444; border-color:#ef4444;">❌ 清除重置</button>
             </div>
         </div>
@@ -442,7 +435,7 @@
     <div class="nav-item" onclick="switchTab('tab-settings', this)"><div class="nav-icon">👤</div><div class="nav-text">設定</div></div>
 </nav>
 
-<!-- 圖卡 Modal (V17.1 重新設計的精美報表) -->
+<!-- 圖卡 Modal -->
 <div id="shareCardModal" class="modal" onclick="closeModal(event)">
     <div class="share-card">
         <div class="share-header"></div>
@@ -531,7 +524,7 @@
         autoSave();
     }
 
-    // --- Core Logic V17.1 ---
+    // --- Core Logic V18 ---
     let sellResult = null, buyResult = null;
     
     function calculateSellTaxData() {
@@ -600,13 +593,13 @@
 
     function doBuy() {
         let rYear=parseFloat(document.getElementById('rate').value)/100;
-        let originalRateStr = document.getElementById('rate').value; // for reporting
+        let originalRateStr = document.getElementById('rate').value; 
         if(document.getElementById('stressTest').checked) rYear += 0.005;
         
         const years=parseInt(document.getElementById('loanYears').value);
         const grace=parseInt(document.getElementById('gracePeriod').value);
         const ltv=parseFloat(document.getElementById('ltvRate').value);
-        const ltvStr = (ltv * 10).toString(); // for reporting
+        const ltvStr = (ltv * 10).toString(); 
 
         let rMonth = rYear/12, payMonths = (years - grace) * 12;
         let factor = (Math.pow(1+rMonth, payMonths) * rMonth) / (Math.pow(1+rMonth, payMonths) - 1);
@@ -653,9 +646,8 @@
             let finalLTV = isLuxuryLimited ? LUXURY_LTV : ltv;
             finalLoan = finalPrice * finalLTV;
             
-            // 明細拆解
-            dpCash = finalPrice - finalLoan; // 頭期款
-            extraCash = finalPrice * 0.05;   // 預估5%雜支
+            dpCash = finalPrice - finalLoan; 
+            extraCash = finalPrice * 0.05;   
             requiredCash = dpCash + extraCash;
             
             document.getElementById('outBigLabel').innerText = "需準備現金 (含頭期+5%雜支)";
@@ -685,12 +677,168 @@
             normalPay, interestOnly, grace, isLuxuryLimited,
             years, rate: originalRateStr, ltvStr
         };
+        updateRefund(finalPrice);
         autoSave();
     }
 
-    // --- 圖卡生成升級版 (V17.1) ---
+    function updateRefund(estimatedBuyPrice) {
+        const sellData = calculateSellTaxData();
+        const refundEl = document.getElementById('outRefund');
+        
+        if(!sellData || sellData.tax <= 0 || sellData.isOldScheme) {
+            refundEl.innerText = "$ 0.0 萬";
+            return;
+        }
+        
+        let refund = 0;
+        if (estimatedBuyPrice >= sellData.sP) {
+            refund = sellData.tax;
+        } else if (sellData.sP > 0) {
+            refund = sellData.tax * (estimatedBuyPrice / sellData.sP);
+        }
+        refundEl.innerText = "$ " + refund.toFixed(1) + " 萬";
+    }
+
+    function doPK() {
+        const p=parseFloat(document.getElementById('pkPrice').value), r=parseFloat(document.getElementById('pkRent').value);
+        if(!p || !r) { alert("請輸入總價與租金"); return; } 
+        
+        document.getElementById('areaPK').style.display='block';
+        let rentTotal = r * 12 * 10;
+        let buyGain = (p * Math.pow(1.04, 10)) - p;
+        document.getElementById('resRentTotal').innerText = "-" + Math.round(rentTotal/10000) + " 萬";
+        document.getElementById('resBuyGain').innerText = "+" + Math.round(buyGain) + " 萬";
+        autoSave();
+    }
+
+    // --- Helpers ---
+    function autoSave() {
+        const d = {
+            buyMode: currentBuyMode,
+            targetPrice: document.getElementById('targetPrice').value,
+            buyDate: document.getElementById('buyDate').value,
+            sellDate: document.getElementById('sellDate').value,
+            buyP: document.getElementById('buyP').value,
+            sellP: document.getElementById('sellP').value,
+            exp: document.getElementById('exp').value,
+            loanL: document.getElementById('loanL').value,
+            newC: document.getElementById('newC').value,
+            mP: document.getElementById('mP').value,
+            isSelf: document.getElementById('isSelf').checked,
+            calcAgentFee: document.getElementById('calcAgentFee').checked,
+            pkPrice: document.getElementById('pkPrice').value,
+            pkRent: document.getElementById('pkRent').value,
+            rateSelect: document.getElementById('rateSelect').value,
+            loanYears: document.getElementById('loanYears').value,
+            gracePeriod: document.getElementById('gracePeriod').value,
+            ltvRate: document.getElementById('ltvRate').value
+        };
+        localStorage.setItem('simbaAutoSave_v18', JSON.stringify(d));
+    }
+    function loadAutoSave() {
+        const d = JSON.parse(localStorage.getItem('simbaAutoSave_v18'));
+        if(d) {
+            if(d.buyMode) setBuyMode(d.buyMode);
+            if(d.targetPrice) document.getElementById('targetPrice').value = d.targetPrice;
+            if(d.buyDate) document.getElementById('buyDate').value = d.buyDate;
+            if(d.sellDate) document.getElementById('sellDate').value = d.sellDate;
+            document.getElementById('buyP').value = d.buyP||'';
+            document.getElementById('sellP').value = d.sellP||'';
+            document.getElementById('exp').value = d.exp||'';
+            document.getElementById('loanL').value = d.loanL||'';
+            document.getElementById('newC').value = d.newC||'';
+            document.getElementById('mP').value = d.mP||'';
+            document.getElementById('isSelf').checked = d.isSelf;
+            document.getElementById('calcAgentFee').checked = d.calcAgentFee;
+            document.getElementById('pkPrice').value = d.pkPrice||'';
+            document.getElementById('pkRent').value = d.pkRent||'';
+            if(d.rateSelect) document.getElementById('rateSelect').value = d.rateSelect;
+            if(d.loanYears) document.getElementById('loanYears').value = d.loanYears;
+            if(d.gracePeriod) document.getElementById('gracePeriod').value = d.gracePeriod;
+            if(d.ltvRate) document.getElementById('ltvRate').value = d.ltvRate;
+            
+            toggleAgentFee();
+            syncCheckUI('isSelf'); syncCheckUI('calcAgentFee');
+        }
+    }
+    
+    function autoCost(){ const p=parseFloat(document.getElementById('sellP').value); if(p){document.getElementById('exp').value=(p*0.01).toFixed(1); autoSave();}}
+    function autoLoanBalance(){ const p=parseFloat(document.getElementById('buyP').value); if(p){document.getElementById('loanL').value=Math.round(p*0.8); autoSave();}}
+    function toggleAgentFee(){ 
+        const p = parseFloat(document.getElementById('sellP').value)||0;
+        document.getElementById('agentFeeInput').value = document.getElementById('calcAgentFee').checked ? (p*0.04).toFixed(1) : 0; 
+    }
+    document.getElementById('sellP').addEventListener('input', toggleAgentFee);
+    function updateRateInput(){ 
+        const s=document.getElementById('rateSelect'); const i=document.getElementById('rate'); 
+        if(s.value==='custom'){ i.style.display='block'; i.focus(); } else { i.style.display='none'; i.value=s.value; } 
+    }
+    function setNewYouth(){ 
+        document.getElementById('rateSelect').value='1.775'; document.getElementById('rate').value=1.775; 
+        document.getElementById('ltvRate').value=0.85; document.getElementById('loanYears').value=40; 
+        document.getElementById('gracePeriod').value=5; autoSave(); alert("已套用新青安！");
+    }
+
+    function resetForm(tabId) {
+        if(!confirm('確定要清除填寫的資料嗎？')) return;
+        if(tabId === 'sell') {
+            document.getElementById('buyDate').value = ''; document.getElementById('sellDate').value = '';
+            document.getElementById('buyP').value = ''; document.getElementById('sellP').value = '';
+            document.getElementById('exp').value = ''; document.getElementById('loanL').value = '';
+            document.getElementById('areaS').style.display = 'none'; sellResult = null;
+        } else if (tabId === 'buy') {
+            document.getElementById('newC').value = ''; document.getElementById('mP').value = ''; document.getElementById('targetPrice').value = '';
+            document.getElementById('areaB').style.display = 'none'; buyResult = null;
+        }
+        autoSave();
+    }
+
+    // --- Profile & Share (V18 Fixes) ---
+    function handleProfileUpload(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // 直接預覽不強制透過 canvas 壓縮，避免 iOS/iPadOS bug
+                document.getElementById('profilePreview').src = e.target.result;
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    
+    function saveProfile() {
+        try {
+            const p = {
+                name: document.getElementById('agentName').value,
+                phone: document.getElementById('agentPhone').value,
+                slogan: document.getElementById('agentSlogan').value,
+                img: document.getElementById('profilePreview').src
+            };
+            // 寫入 localStorage
+            localStorage.setItem('simbaProfile_v18', JSON.stringify(p));
+            // 提示成功
+            alert('✅ 設定已儲存！大頭貼與聯絡資訊將顯示於圖卡中。');
+        } catch (e) { 
+            alert('❌ 儲存失敗：您上傳的照片檔案可能過大，請裁切或換一張較小的照片試試看。'); 
+        }
+    }
+    
+    function loadProfile() {
+        const s = JSON.parse(localStorage.getItem('simbaProfile_v18') || '{}');
+        if(s.name) document.getElementById('agentName').value = s.name;
+        if(s.phone) document.getElementById('agentPhone').value = s.phone;
+        if(s.slogan) document.getElementById('agentSlogan').value = s.slogan;
+        if(s.img && s.img.startsWith('data:image')) document.getElementById('profilePreview').src = s.img;
+    }
+    
+    function clearProfile() { 
+        if(confirm('確定清除個人設定？這將還原為預設頭像。')) { 
+            localStorage.removeItem('simbaProfile_v18'); 
+            location.reload(); 
+        } 
+    }
+
     function showShareCard(type) {
-        const s = JSON.parse(localStorage.getItem('simbaProfile_v17') || '{}');
+        const s = JSON.parse(localStorage.getItem('simbaProfile_v18') || '{}');
         const modal = document.getElementById('shareCardModal');
         const content = document.getElementById('cardBodyContent');
         
@@ -761,7 +909,6 @@
                     ${conditionHtml}
                 `;
             } else {
-                // 總價反推模式：給出詳細資金拆解
                 content.innerHTML = `
                     <div class="share-title">購屋資金精算</div>
                     <div class="share-sub">Financial Assessment Report</div>
@@ -789,10 +936,10 @@
         modal.style.display = 'flex';
     }
 
-    // --- Save Slots (保持不變) ---
+    // --- Save Slots ---
     function openSaveManager(){ 
         const list = document.getElementById('slotList'); list.innerHTML = '';
-        const data = JSON.parse(localStorage.getItem('simbaSlots_v17')||'{}');
+        const data = JSON.parse(localStorage.getItem('simbaSlots_v18')||'{}');
         [1,2,3].forEach(i => {
             const d = data[i];
             const name = d && d.name ? d.name : `客戶 ${i}`;
@@ -830,24 +977,24 @@
             pkPrice: document.getElementById('pkPrice').value, pkRent: document.getElementById('pkRent').value,
             ltvRate: document.getElementById('ltvRate').value
         };
-        const all=JSON.parse(localStorage.getItem('simbaSlots_v17')||'{}'); 
-        all[id]=d; localStorage.setItem('simbaSlots_v17',JSON.stringify(all)); 
+        const all=JSON.parse(localStorage.getItem('simbaSlots_v18')||'{}'); 
+        all[id]=d; localStorage.setItem('simbaSlots_v18',JSON.stringify(all)); 
         openSaveManager();
     }
 
     function renameSlot(id) {
-        const all = JSON.parse(localStorage.getItem('simbaSlots_v17')||'{}');
+        const all = JSON.parse(localStorage.getItem('simbaSlots_v18')||'{}');
         if(!all[id]) { alert("請先存檔才能改名"); return; }
         let newName = prompt("修改客戶名稱:", all[id].name);
         if(newName && newName !== '') {
             all[id].name = newName;
-            localStorage.setItem('simbaSlots_v17', JSON.stringify(all));
+            localStorage.setItem('simbaSlots_v18', JSON.stringify(all));
             openSaveManager();
         }
     }
 
     function loadSlot(id){
-        const d=JSON.parse(localStorage.getItem('simbaSlots_v17')||'{}')[id]; 
+        const d=JSON.parse(localStorage.getItem('simbaSlots_v18')||'{}')[id]; 
         if(d){ 
             if(d.buyMode) setBuyMode(d.buyMode);
             if(d.targetPrice) document.getElementById('targetPrice').value=d.targetPrice;
@@ -863,21 +1010,6 @@
             document.getElementById('saveModal').style.display='none'; 
             alert(`已載入：${d.name}`);
         }
-    }
-
-    // --- Tab Switch Helper ---
-    function resetForm(tabId) {
-        if(!confirm('確定要清除填寫的資料嗎？')) return;
-        if(tabId === 'sell') {
-            document.getElementById('buyDate').value = ''; document.getElementById('sellDate').value = '';
-            document.getElementById('buyP').value = ''; document.getElementById('sellP').value = '';
-            document.getElementById('exp').value = ''; document.getElementById('loanL').value = '';
-            document.getElementById('areaS').style.display = 'none'; sellResult = null;
-        } else if (tabId === 'buy') {
-            document.getElementById('newC').value = ''; document.getElementById('mP').value = ''; document.getElementById('targetPrice').value = '';
-            document.getElementById('areaB').style.display = 'none'; buyResult = null;
-        }
-        autoSave();
     }
 </script>
 </body>
