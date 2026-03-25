@@ -12,79 +12,81 @@
     <style>
         :root {
             --primary: #007AFF;
-            --primary-light: #E5F1FF;
+            --primary-dark: #0056B3;
             --bg-body: #F2F2F7;
-            --surface: #ffffff;
+            --surface: #FFFFFF;
             --text-main: #1D1D1F;
-            --text-sub: #86868B;
             --radius-l: 24px;
-            --radius-m: 16px;
             --nav-height: 75px;
         }
 
         * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg-body); margin: 0; color: var(--text-main); padding-bottom: calc(var(--nav-height) + 50px); user-select: none; }
         
-        /* --- 鎖定與啟動 --- */
+        /* --- 啟動與鎖定 --- */
         #splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #007AFF, #5856D6); z-index: 11000; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: 0.8s; }
-        #lock-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 122, 255, 0.95); backdrop-filter: blur(25px); z-index: 10000; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 30px; }
-        .lock-content { background: white; padding: 40px 30px; border-radius: 28px; text-align: center; width: 100%; max-width: 360px; }
-        .lock-input { width: 100%; padding: 16px; font-size: 1rem; text-align: center; border: 2px solid #f2f2f7; border-radius: 16px; margin-bottom: 20px; font-weight: bold; color: var(--primary); }
+        #lock-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 122, 255, 0.96); backdrop-filter: blur(25px); z-index: 10000; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 30px; }
+        .lock-content { background: white; padding: 40px 30px; border-radius: 28px; text-align: center; width: 100%; max-width: 360px; box-shadow: 0 30px 60px rgba(0,0,0,0.1); }
+        .lock-input { width: 100%; padding: 16px; font-size: 1rem; text-align: center; border: 2px solid #F2F2F7; border-radius: 16px; margin-bottom: 20px; font-weight: bold; color: var(--primary); }
         .lock-btn { background: var(--primary); color: white; width: 100%; padding: 16px; border: none; border-radius: 16px; font-size: 1.1rem; font-weight: bold; }
 
         /* --- UI 佈局 --- */
-        header { background: linear-gradient(to right, #007AFF, #5856D6); color: white; padding: 0 20px; height: 60px; position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: center; }
+        header { background: linear-gradient(to right, #007AFF, #5856D6); color: white; height: 60px; position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { font-size: 1.1rem; margin: 0; font-weight: 800; letter-spacing: 1px; }
+        
         .container { width: 100%; padding: 20px 15px; margin: 0 auto; max-width: 650px; }
-        .card { background: white; border-radius: var(--radius-l); padding: 25px 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); margin-bottom: 25px; }
-        h2 { font-size: 1.1rem; margin: 0 0 20px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
-        h2::before { content: ''; width: 4px; height: 16px; background: var(--primary); border-radius: 2px; }
+        .card { background: white; border-radius: var(--radius-l); padding: 30px 20px; box-shadow: 0 4px 25px rgba(0,0,0,0.04); margin-bottom: 25px; animation: slideUp 0.5s ease-out; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        h2 { font-size: 1.15rem; margin: 0 0 20px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+        h2::before { content: ''; width: 4px; height: 18px; background: var(--primary); border-radius: 2px; }
 
-        .mode-toggle { display: flex; background: #f2f2f7; border-radius: 14px; padding: 5px; margin-bottom: 25px; }
-        .toggle-btn { flex: 1; text-align: center; padding: 10px; font-size: 0.95rem; font-weight: 700; color: #8e8e93; border-radius: 11px; cursor: pointer; }
+        .mode-toggle { display: flex; background: #F2F2F7; border-radius: 14px; padding: 5px; margin-bottom: 25px; }
+        .toggle-btn { flex: 1; text-align: center; padding: 12px; font-size: 0.95rem; font-weight: 700; color: #8E8E93; border-radius: 11px; cursor: pointer; }
         .toggle-btn.active { background: white; color: var(--primary); box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
 
         .grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
-        .form-group label { display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; color: #555; margin-bottom: 6px; }
-        input, select { width: 100%; padding: 12px 15px; border: 1.5px solid #e5e5ea; border-radius: 12px; font-size: 1rem; background: #fafafa; }
-        input:focus { border-color: var(--primary); outline: none; }
+        .form-group label { display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; color: #444; margin-bottom: 6px; }
+        input, select { width: 100%; padding: 14px 15px; border: 1.5px solid #E5E5EA; border-radius: 14px; font-size: 1.05rem; background: #FAFAFA; transition: 0.2s; }
+        input:focus { border-color: var(--primary); background: #FFF; outline: none; }
 
-        /* --- Checkbox 修正版 --- */
-        .check-item { display: flex; align-items: center; padding: 15px; background: #f9f9fb; border-radius: 12px; border: 1px solid #eee; margin-top: 10px; cursor: pointer; }
-        .check-item.active { background: var(--primary-light); border-color: var(--primary); }
-        .check-box { width: 22px; height: 22px; border: 2px solid #ccc; border-radius: 6px; margin-right: 12px; display: flex; align-items: center; justify-content: center; background: white; flex-shrink: 0; }
+        /* --- Checkbox 修正 --- */
+        .check-item { display: flex; align-items: center; padding: 15px; background: #F9F9FB; border-radius: 14px; border: 1.5px solid #EEE; margin-top: 10px; cursor: pointer; transition: 0.2s; }
+        .check-item.active { background: #E5F1FF; border-color: var(--primary); }
+        .check-box { width: 22px; height: 22px; border: 2px solid #CCC; border-radius: 6px; margin-right: 12px; display: flex; align-items: center; justify-content: center; background: white; flex-shrink: 0; }
         .check-item.active .check-box { background: var(--primary); border-color: var(--primary); }
         .check-box::after { content: '✓'; color: white; font-size: 14px; font-weight: bold; display: none; }
         .check-item.active .check-box::after { display: block; }
-        .check-label { font-size: 0.9rem; font-weight: 600; color: #444; }
 
-        .btn-group { display: flex; gap: 10px; margin-top: 25px; flex-direction: column; }
-        button { width: 100%; padding: 16px; border: none; border-radius: 14px; font-size: 1.1rem; font-weight: 800; cursor: pointer; display: flex; justify-content: center; align-items: center; }
-        .btn-main { background: var(--primary); color: white; }
-        .btn-outline { background: white; border: 2px solid var(--primary); color: var(--primary); }
+        .btn-group { display: flex; gap: 12px; margin-top: 30px; flex-direction: column; }
+        button { width: 100%; padding: 18px; border: none; border-radius: 16px; font-size: 1.1rem; font-weight: 800; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: 0.3s; }
+        .btn-main { background: var(--primary); color: white; box-shadow: 0 8px 25px rgba(0,122,255,0.25); }
+        .btn-outline { background: white; border: 2.5px solid var(--primary); color: var(--primary); }
+        button:active { transform: scale(0.97); }
 
-        .res-area { margin-top: 30px; display: none; }
-        .res-card { background: linear-gradient(135deg, #007AFF, #5856D6); border-radius: 20px; padding: 25px; color: white; text-align: center; }
-        .res-val { font-size: 2.2rem; font-weight: 900; }
+        .res-area { margin-top: 35px; display: none; }
+        .res-card { background: linear-gradient(135deg, #007AFF, #5856D6); border-radius: 24px; padding: 30px 20px; color: white; text-align: center; box-shadow: 0 15px 40px rgba(0,122,255,0.3); }
+        .res-val { font-size: 2.4rem; font-weight: 900; }
         
-        /* --- 報表彈出層 --- */
+        /* --- 報表 Modal (全裝置格式最佳化) --- */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 20000; overflow-y: auto; flex-direction: column; align-items: center; padding: 40px 15px; }
-        .share-card { width: 100%; max-width: 400px; background: white; border-radius: 32px; overflow: hidden; flex-shrink: 0; box-shadow: 0 40px 80px rgba(0,0,0,0.4); }
-        .share-header { background: linear-gradient(135deg, #007AFF, #5856D6); padding: 30px 20px; color: white; text-align: center; }
-        .share-body { padding: 25px; color: #1d1d1f; }
-        .share-hero-box { background: #f2f2f7; border-radius: 20px; padding: 20px; margin-bottom: 20px; text-align: center; }
-        .share-hero-val { font-size: 2.2rem; font-weight: 900; color: #007AFF; }
-        .share-detail-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #eee; font-size: 0.95rem; }
-        .share-footer { background: #f9f9fb; padding: 20px; display: flex; align-items: center; gap: 15px; border-top: 1px solid #eee; }
-        .share-avatar { width: 50px; height: 50px; border-radius: 50%; border: 2px solid #007AFF; object-fit: cover; }
-        .modal-close-btn { background: white; color: #007AFF; padding: 15px 60px; border-radius: 40px; border: none; font-weight: 900; font-size: 1.1rem; margin: 30px 0; }
+        .share-card { width: 100%; max-width: 400px; background: white; border-radius: 35px; overflow: hidden; flex-shrink: 0; box-shadow: 0 40px 80px rgba(0,0,0,0.4); }
+        .share-header { background: linear-gradient(135deg, #007AFF, #5856D6); padding: 35px 25px; color: white; text-align: center; }
+        .share-title { font-size: 1.6rem; font-weight: 800; margin-bottom: 5px; }
+        .share-body { padding: 30px 25px; color: #1D1D1F; }
+        .share-hero-box { background: #F2F2F7; border-radius: 24px; padding: 25px 15px; margin-bottom: 25px; text-align: center; }
+        .share-hero-val { font-size: 2.3rem; font-weight: 900; color: #007AFF; }
+        .share-detail-row { display: flex; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid #EEE; font-size: 1rem; }
+        .share-footer { background: #F9F9FB; padding: 25px; display: flex; align-items: center; gap: 15px; border-top: 1px solid #EEE; }
+        .share-avatar { width: 55px; height: 55px; border-radius: 50%; border: 2.5px solid #007AFF; object-fit: cover; }
+        .share-license { font-size: 0.65rem; color: #CCC; text-align: center; padding: 15px; background: #F9F9FB; border-top: 1px solid #F2F2F7; letter-spacing: 1px; }
+        .modal-close-btn { background: white; color: #007AFF; padding: 18px 0; width: 100%; max-width: 320px; border-radius: 40px; border: none; font-weight: 900; font-size: 1.15rem; cursor: pointer; box-shadow: 0 10px 25px rgba(0,0,0,0.1); margin: 30px 0 60px; }
 
         /* --- 導航 --- */
-        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 75px; background: rgba(255,255,255,0.9); backdrop-filter: blur(20px); border-top: 1px solid #eee; display: flex; justify-content: space-around; align-items: center; z-index: 999; }
-        .nav-item { flex: 1; text-align: center; color: #8e8e93; font-size: 0.8rem; font-weight: 700; cursor: pointer; }
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 75px; background: rgba(255,255,255,0.9); backdrop-filter: blur(20px); border-top: 1px solid #EEE; display: flex; justify-content: space-around; align-items: center; z-index: 999; }
+        .nav-item { flex: 1; text-align: center; color: #8E8E93; font-size: 0.8rem; font-weight: 700; cursor: pointer; }
         .nav-item.active { color: var(--primary); }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-        .helper { color: var(--primary); font-size: 0.75rem; text-decoration: underline; font-weight: 800; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -96,8 +98,8 @@
 
 <div id="lock-screen">
     <div class="lock-content">
-        <div class="lock-title">系統開通驗證</div>
-        <input type="text" id="passcodeInput" class="lock-input" placeholder="SN-手機-生日">
+        <div class="lock-title">系統權限驗證</div>
+        <input type="text" id="passcodeInput" class="lock-input" placeholder="請輸入授權金鑰">
         <button onclick="checkCloudAuth()" class="lock-btn">解除鎖定</button>
     </div>
 </div>
@@ -107,21 +109,24 @@
 <div class="container">
     <div id="tab-sell" class="tab-content active">
         <div class="card">
-            <h2>💰 售屋獲利精算</h2>
+            <h2>💰 售屋獲利試算</h2>
             <div class="grid">
-                <div class="form-group"><label>取得日期</label><input type="date" id="buyDate"></div>
-                <div class="form-group"><label>買入價格 (萬)</label><input type="number" id="sell_buyP" placeholder="0"></div>
-                <div class="form-group"><label>預計賣價 (萬)</label><input type="number" id="sell_sellP" placeholder="0"></div>
-                <div class="form-group"><label>房貸餘額 (萬) <span class="helper" onclick="autoSellLoan()">估8成</span></label><input type="number" id="sell_loanL" placeholder="0"></div>
+                <div class="form-group"><label>取得日期</label><input type="date" id="sell_buyDate"></div>
+                <div class="form-group"><label>買入價格 (萬)</label><input type="number" id="sell_buyP"></div>
+                <div class="form-group"><label>預計賣價 (萬)</label><input type="number" id="sell_sellP"></div>
+                <div class="form-group"><label>房貸餘額 (萬)</label><input type="number" id="sell_loanL"></div>
                 <div class="check-item" id="item_isSelf" onclick="toggleCheck('isSelf')">
                     <div class="check-box"></div><div class="check-label">符合自住 6 年免稅 (400萬免稅額)</div>
                 </div>
                 <div class="check-item" id="item_isRefund" onclick="toggleCheck('isRefund')">
                     <div class="check-box"></div><div class="check-label">擬使用「重購退稅」</div>
                 </div>
+                <div id="boxRefund" style="display:none; padding:15px; background:#F2F2F7; border-radius:14px;">
+                    <div class="form-group"><label>新購屋總價 (萬)</label><input type="number" id="sell_newP" placeholder="用於計算退稅額"></div>
+                </div>
             </div>
-            <div class="btn-group"><button onclick="doSell()" class="btn-main">📊 開始計算獲利</button><button onclick="showShareCard('sell')" class="btn-outline">✨ 製作財務報表</button></div>
-            <div id="areaS" class="res-area"><div class="res-card"><div style="opacity:0.8; font-size:0.9rem;">預估實拿現金 (稅後)</div><div class="res-val" id="outC">0 萬</div></div></div>
+            <div class="btn-group"><button onclick="doSell()" class="btn-main">📊 開始計算獲利</button><button onclick="showShareCard('sell')" class="btn-outline">✨ 製作專業報表</button></div>
+            <div id="areaS" class="res-area"><div class="res-card"><div style="opacity:0.8; font-size:0.9rem; margin-bottom:5px;">預估實拿現金 (稅後)</div><div class="res-val" id="outC">0 萬</div><div id="refundInfo" style="font-size:0.8rem; margin-top:10px; color:#E5F1FF;"></div></div></div>
         </div>
     </div>
 
@@ -131,32 +136,31 @@
             <div class="mode-toggle"><div id="btnModeB" class="toggle-btn active" onclick="setBuyMode('budget')">用預算推</div><div id="btnModeT" class="toggle-btn" onclick="setBuyMode('target')">由總價推</div></div>
             <div class="grid">
                 <div id="groupBudget">
-                    <div class="form-group"><label>手上可用現金 (萬)</label><input type="number" id="buy_cash" placeholder="預留5%雜支後的現金"></div>
-                    <div class="form-group" style="margin-top:10px;"><label>每月還款預算 (萬)</label><input type="number" id="buy_monthly" placeholder="每月想繳多少"></div>
+                    <div class="form-group"><label>手上可用現金 (萬)</label><input type="number" id="buy_cash"></div>
+                    <div class="form-group" style="margin-top:10px;"><label>每月還款預算 (萬)</label><input type="number" id="buy_monthly"></div>
                 </div>
                 <div id="groupTarget" style="display:none;">
-                    <div class="form-group"><label>房屋目標總價 (萬)</label><input type="number" id="buy_target" placeholder="例：1500"></div>
+                    <div class="form-group"><label>目標房屋總價 (萬)</label><input type="number" id="buy_target"></div>
                 </div>
-                <div style="border-top:1px dashed #eee; padding-top:15px;"></div>
+                <div style="border-top:1px dashed #EEE; padding-top:15px;"></div>
                 <div class="form-group">
                     <label>房貸利率 (%)</label>
-                    <select id="buy_rateSelect" onchange="updateRate()"><option value="1.775">1.775% (新青安)</option><option value="2.18">2.18% (地板價)</option><option value="2.5" selected>2.5% (一般)</option><option value="custom">自定義輸入...</option></select>
+                    <select id="buy_rateSelect" onchange="updateRate()"><option value="2.5">2.5 % (一般)</option><option value="2.75">2.75 %</option><option value="3.0">3.0 %</option><option value="custom">手動輸入...</option></select>
                     <input type="number" id="buy_rateCustom" value="2.5" step="0.01" style="display:none; margin-top:10px;">
                 </div>
                 <div class="form-group">
                     <label>寬限期 (年)</label>
-                    <select id="buy_graceSelect" onchange="updateGrace()"><option value="0" selected>無寬限</option><option value="3">3 年</option><option value="5">5 年</option><option value="custom">自定義...</option></select>
-                    <input type="number" id="buy_graceCustom" value="0" style="display:none; margin-top:10px;">
+                    <select id="buy_grace"><option value="0">無寬限期</option><option value="3">3 年</option><option value="5">5 年</option></select>
                 </div>
-                <div class="form-group"><label>貸款成數</label><select id="buy_ltv"><option value="0.7">7 成</option><option value="0.75" selected>7.5 成 (保守)</option><option value="0.8">8 成</option></select></div>
+                <div class="form-group"><label>銀行貸款成數</label><select id="buy_ltv"><option value="0.7">7 成</option><option value="0.75" selected>7.5 成</option><option value="0.8">8 成</option></select></div>
             </div>
-            <div class="btn-group"><button onclick="doBuy()" class="btn-main">🔍 進行評估</button><button onclick="showShareCard('buy')" class="btn-outline">✨ 製作財務報表</button></div>
-            <div id="areaB" class="res-area"><div class="res-card"><div id="resBuyLabel" style="opacity:0.8; font-size:0.9rem;">建議總價區間</div><div class="res-val" id="resBuyVal">0 萬</div></div></div>
+            <div class="btn-group"><button onclick="doBuy()" class="btn-main">🔍 進行財務評估</button><button onclick="showShareCard('buy')" class="btn-gold">✨ 製作專業報表</button></div>
+            <div id="areaB" class="res-area"><div class="res-card"><div id="resBuyLabel" style="opacity:0.8; font-size:0.9rem; margin-bottom:5px;">建議購屋總價</div><div class="res-val" id="resBuyVal">0 萬</div></div></div>
         </div>
     </div>
 
-    <div id="tab-pk" class="tab-content"><div class="card"><h2>⚖️ 租房 vs 買房對決</h2><div class="grid"><div class="form-group"><label>房屋總價 (萬)</label><input type="number" id="pkPrice"></div><div class="form-group"><label>每月租金 (元)</label><input type="number" id="pkRent"></div></div><button onclick="doPK()" class="btn-main" style="margin-top:20px; background:orange;">🥊 開始對決</button><div id="areaPK" style="display:none; margin-top:20px;"><div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;"><div style="background:#fff5f5; padding:15px; border-radius:15px; text-align:center;"><span style="color:#ef4444; font-size:0.8rem;">10年租金支出</span><div id="resRent" style="font-size:1.2rem; font-weight:800; color:#ef4444;">0 萬</div></div><div style="background:#f0fdf4; padding:15px; border-radius:15px; text-align:center;"><span style="color:#22c55e; font-size:0.8rem;">10年預估增值</span><div id="resGain" style="font-size:1.2rem; font-weight:800; color:#22c55e;">0 萬</div></div></div></div></div></div>
-    <div id="tab-settings" class="tab-content"><div class="card"><h2>👤 品牌設定</h2><div style="text-align:center; margin-bottom:20px;"><div style="width:120px; height:120px; margin:0 auto; overflow:hidden; border-radius:50%; border:3px solid var(--primary); cursor:pointer;" onclick="document.getElementById('profileImgInput').click()"><img id="profilePreview" src="image_24505e.png" style="width:100%; height:100%; object-fit:cover;"></div><input type="file" id="profileImgInput" accept="image/*" style="display:none;" onchange="handleProfileUpload(this)"></div><div class="grid"><input type="text" id="agentName" placeholder="顯示姓名/職稱"><input type="text" id="agentPhone" placeholder="聯絡電話"><input type="text" id="agentSlogan" placeholder="專業座右銘"></div><button onclick="saveProfile()" class="btn-main" style="margin-top:20px;">💾 儲存並同步</button></div></div>
+    <div id="tab-pk" class="tab-content"><div class="card"><h2>⚖️ 租房 vs 買房對決</h2><div class="grid"><div class="form-group"><label>房屋總價 (萬)</label><input type="number" id="pkPrice"></div><div class="form-group"><label>每月租金 (元)</label><input type="number" id="pkRent"></div></div><button onclick="doPK()" class="btn-main" style="margin-top:20px; background:linear-gradient(135deg, #FF9500, #FF5E00);">🥊 開始 10 年資產對決</button><div id="areaPK" style="display:none; margin-top:25px;"><div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;"><div style="background:#FFF5F5; padding:20px 10px; border-radius:20px; text-align:center;"><span style="color:#EF4444; font-size:0.85rem; font-weight:700;">10年租金支出</span><div id="resRent" style="font-size:1.3rem; font-weight:900; color:#EF4444; margin-top:5px;">0 萬</div></div><div style="background:#F0FDF4; padding:20px 10px; border-radius:20px; text-align:center;"><span style="color:#22C55E; font-size:0.85rem; font-weight:700;">10年預估增值</span><div id="resGain" style="font-size:1.3rem; font-weight:900; color:#22C55E; margin-top:5px;">0 萬</div></div></div></div></div></div>
+    <div id="tab-settings" class="tab-content"><div class="card"><h2>👤 品牌形象設定</h2><div style="text-align:center; margin-bottom:30px;"><div style="width:120px; height:120px; margin:0 auto; overflow:hidden; border-radius:50%; border:3px solid var(--primary); cursor:pointer;" onclick="document.getElementById('profileImgInput').click()"><img id="profilePreview" src="image_24505e.png" style="width:100%; height:100%; object-fit:cover;"></div><input type="file" id="profileImgInput" accept="image/*" style="display:none;" onchange="handleProfileUpload(this)"></div><div class="grid"><input type="text" id="agentName" placeholder="姓名 / 職稱"><input type="text" id="agentPhone" placeholder="聯絡電話"><input type="text" id="agentSlogan" placeholder="專業座右銘"></div><button onclick="saveProfile()" class="btn-main" style="margin-top:25px;">💾 儲存並更新報表資訊</button></div></div>
 </div>
 
 <nav class="bottom-nav">
@@ -168,16 +172,15 @@
 
 <div id="shareCardModal" class="modal">
     <div class="share-card">
-        <div class="share-header"><div class="share-title">不動產財務分析報告</div><div style="font-size:0.7rem; opacity:0.8;">SKYLINE PREMIUM REPORT</div></div>
+        <div class="share-header"><div class="share-title">不動產財務分析報告</div><div style="font-size:0.7rem; opacity:0.8; letter-spacing:2px; font-weight:700;">PREMIUM FINANCIAL REPORT</div></div>
         <div class="share-body" id="cardBodyContent"></div>
-        <div class="share-footer"><img id="cardAgentImg" class="share-avatar" src=""><div class="share-info"><div class="share-name" id="cardAgentName">專業顧問</div><div id="cardAgentSlogan" style="color:#86868b; font-size:0.8rem;"></div><div class="share-contact" id="cardAgentPhone" style="color:#555; font-size:0.9rem; font-weight:700;">--</div></div></div>
+        <div class="share-footer"><img id="cardAgentImg" class="share-avatar" src=""><div class="share-info"><div class="share-name" id="cardAgentName">專業顧問</div><div id="cardAgentSlogan" style="color:#86868B; font-size:0.85rem; margin-top:2px;"></div><div class="share-contact" id="cardAgentPhone" style="color:#555; font-size:0.9rem; font-weight:700; margin-top:3px;">--</div></div></div>
         <div id="licenseFooter" class="share-license"></div>
     </div>
     <button class="modal-close-btn" onclick="document.getElementById('shareCardModal').style.display='none'">關閉報表</button>
 </div>
 
 <script>
-    // --- Firebase 配置 ---
     const firebaseConfig = {
         apiKey: "AIzaSyDv3-2psunhNzjbTIY38L8jbVf2wmO5WEw",
         authDomain: "simbaapp-62d40.firebaseapp.com",
@@ -194,11 +197,10 @@
     let sellResult = null, buyResult = null, currentBuyMode = 'budget';
     const checks = { isSelf: false, isRefund: false };
 
-    // --- 認證 ---
     async function checkCloudAuth() {
         const sn = document.getElementById('passcodeInput').value.trim();
         const parts = sn.split('-');
-        if (parts.length !== 3) { alert("❌ 格式錯誤"); return; }
+        if (parts.length !== 3) { alert("❌ 格式有誤"); return; }
         db.ref('users/' + parts[1]).once('value', (s) => {
             const d = s.val();
             if (d && d.status === 'active' && d.birthday === parts[2]) {
@@ -217,29 +219,36 @@
         loadProfile();
     });
 
-    // --- 售屋邏輯 ---
     function toggleCheck(id) {
         checks[id] = !checks[id];
         document.getElementById('item_' + id).classList.toggle('active', checks[id]);
+        if(id === 'isRefund') document.getElementById('boxRefund').style.display = checks[id] ? 'block' : 'none';
     }
 
+    // --- 售屋邏輯 ---
     function doSell() {
         const bP = parseFloat(document.getElementById('sell_buyP').value)||0, sP = parseFloat(document.getElementById('sell_sellP').value)||0;
-        const loan = parseFloat(document.getElementById('sell_loanL').value)||0, bD = document.getElementById('buyDate').value;
-        if(!bP || !sP || !bD) { alert("⚠️ 請填寫買賣價與取得日期"); return; }
+        const loan = parseFloat(document.getElementById('sell_loanL').value)||0, bD = document.getElementById('sell_buyDate').value;
+        if(!bP || !sP || !bD) { alert("⚠️ 請填寫買賣價與日期"); return; }
         
-        let profit = sP - bP - (sP * 0.05); // 扣除5%基本雜支
+        let profit = sP - bP - (sP * 0.05); // 5% 基本雜支
         let tax = 0;
         if (new Date(bD) >= new Date('2016-01-01')) {
-            let taxableProfit = checks.isSelf ? Math.max(0, profit - 400) : profit;
-            tax = taxableProfit * (checks.isSelf ? 0.1 : 0.45);
+            let taxable = checks.isSelf ? Math.max(0, profit - 400) : profit;
+            tax = taxable * (checks.isSelf ? 0.1 : 0.45);
         }
-        let finalTax = checks.isRefund ? 0 : tax;
-        let cash = sP - loan - finalTax - (sP * 0.04); // 扣除仲介費
         
-        sellResult = { sP, profit, tax: finalTax, cash, isRefund: checks.isRefund };
+        let refund = 0;
+        if (checks.isRefund) {
+            const newP = parseFloat(document.getElementById('sell_newP').value)||0;
+            refund = newP >= sP ? tax : tax * (newP / sP);
+        }
+
+        let cash = sP - loan - (tax - refund) - (sP * 0.04);
+        sellResult = { sP, profit, tax, refund, cash, isRefund: checks.isRefund };
         document.getElementById('areaS').style.display = 'block';
         document.getElementById('outC').innerText = Math.round(cash) + " 萬";
+        if(refund > 0) document.getElementById('refundInfo').innerText = `✨ 重購退稅預計可退回：$ ${Math.round(refund)} 萬`;
     }
 
     // --- 購屋邏輯 ---
@@ -249,15 +258,14 @@
         document.getElementById('btnModeT').classList.toggle('active', m === 'target');
         document.getElementById('groupBudget').style.display = m === 'budget' ? 'block' : 'none';
         document.getElementById('groupTarget').style.display = m === 'target' ? 'block' : 'none';
-        document.getElementById('resBuyLabel').innerText = m === 'budget' ? '建議購屋總價' : '預估總支出(含雜支)';
+        document.getElementById('resBuyLabel').innerText = m === 'budget' ? '建議購屋總價' : '預估需準備現金(含雜支)';
     }
 
     function updateRate() { document.getElementById('buy_rateCustom').style.display = document.getElementById('buy_rateSelect').value === 'custom' ? 'block' : 'none'; }
-    function updateGrace() { document.getElementById('buy_graceCustom').style.display = document.getElementById('buy_graceSelect').value === 'custom' ? 'block' : 'none'; }
 
     function doBuy() {
         const rate = (document.getElementById('buy_rateSelect').value === 'custom' ? parseFloat(document.getElementById('buy_rateCustom').value) : parseFloat(document.getElementById('buy_rateSelect').value)) / 100;
-        const grace = document.getElementById('buy_graceSelect').value === 'custom' ? parseInt(document.getElementById('buy_graceCustom').value) : parseInt(document.getElementById('buy_graceSelect').value);
+        const grace = parseInt(document.getElementById('buy_grace').value);
         const ltv = parseFloat(document.getElementById('buy_ltv').value);
         const rM = rate / 12, pM = (30 - grace) * 12;
         const fact = (Math.pow(1 + rM, pM) * rM) / (Math.pow(1 + rM, pM) - 1);
@@ -278,7 +286,6 @@
         document.getElementById('resBuyVal').innerText = (currentBuyMode === 'budget' ? buyResult.fP : buyResult.rC) + " 萬";
     }
 
-    // --- PK & 其他 ---
     function doPK() {
         const p = parseFloat(document.getElementById('pkPrice').value)||0, r = parseFloat(document.getElementById('pkRent').value)||0;
         document.getElementById('areaPK').style.display = 'block';
@@ -289,17 +296,17 @@
     function showShareCard(type) {
         const s = JSON.parse(localStorage.getItem('simbaProfile_v18') || '{}');
         const lp = localStorage.getItem('simba_license_phone') || "";
-        const u = localStorage.getItem('simba_user_name') || "專業人員";
+        const u = localStorage.getItem('simba_user_name') || "專業顧問";
         const bc = document.getElementById('cardBodyContent');
-        document.getElementById('cardAgentName').innerText = s.name || "專業顧問";
+        document.getElementById('cardAgentName').innerText = s.name || "房產顧問";
         document.getElementById('cardAgentPhone').innerText = s.phone || lp;
         document.getElementById('cardAgentSlogan').innerText = s.slogan || "";
         document.getElementById('cardAgentImg').src = s.img || "image_24505e.png";
 
         if (type === 'sell' && sellResult) {
-            bc.innerHTML = `<div class="share-hero-box"><span style="font-size:0.8rem;color:#666;">預估實拿現金 (稅後)</span><div class="share-hero-val">$ ${sellResult.cash} 萬</div></div><div class="share-detail-row"><span>稅後淨利估算</span><span style="color:#007AFF;">+${Math.round(sellResult.profit)} 萬</span></div><div class="share-detail-row"><span>重購退稅狀態</span><span>${sellResult.isRefund?'已套用':'未申請'}</span></div>`;
+            bc.innerHTML = `<div class="share-hero-box"><span style="font-size:0.8rem;color:#666;">預估實拿現金 (稅後)</span><div class="share-hero-val">$ ${sellResult.cash} 萬</div></div><div class="share-detail-row"><span>稅後淨利估算</span><span style="color:#007AFF;">+${Math.round(sellResult.profit)} 萬</span></div><div class="share-detail-row"><span>重購退稅預估</span><span style="color:#007AFF;">${sellResult.refund>0?'可退 '+Math.round(sellResult.refund)+' 萬':'無'}</span></div>`;
         } else if (type === 'buy' && buyResult) {
-            bc.innerHTML = `<div class="share-hero-box"><span style="font-size:0.8rem;color:#666;">${buyResult.mode==='target'?'需準備總資金':'建議總價區間'}</span><div class="share-hero-val">${buyResult.mode==='target' ? buyResult.rC : buyResult.fP} 萬</div><div style="font-size:0.7rem;color:#999;margin-top:8px;">(含頭期與契稅、代書等約5%預留雜支)</div></div><div class="share-detail-row"><span>本息月付</span><span style="color:#007AFF;font-weight:bold;">${buyResult.nPay.toLocaleString()} 元</span></div>${buyResult.grace>0?`<div class="share-detail-row"><span>寬限期月付 (${buyResult.grace}年)</span><span style="color:#007AFF;">${buyResult.iPay.toLocaleString()} 元</span></div>`:''}`;
+            bc.innerHTML = `<div class="share-hero-box"><span style="font-size:0.8rem;color:#666;">${buyResult.mode==='target'?'需準備預估總現金':'建議購屋總價區間'}</span><div class="share-hero-val">${buyResult.mode==='target' ? buyResult.rC : buyResult.fP} 萬</div><div style="font-size:0.7rem;color:#999;margin-top:10px;">(含頭期與契稅、代書、仲介費等5%雜支)</div></div><div class="share-detail-row"><span>預估貸款 (利率 ${buyResult.rate}%)</span><span>${buyResult.fL} 萬</span></div><div class="share-detail-row"><span>本息攤還月付</span><span style="color:#007AFF;font-weight:bold;">${buyResult.nPay.toLocaleString()} 元</span></div>${buyResult.grace>0?`<div class="share-detail-row"><span>寬限期月付 (${buyResult.grace}年)</span><span style="color:#007AFF;">${buyResult.iPay.toLocaleString()} 元</span></div>`:''}`;
         }
         document.getElementById('licenseFooter').innerText = `【本報表經 ${u} 授權產出 (ID: ${lp.slice(-4)})】`;
         document.getElementById('shareCardModal').style.display = 'flex';
@@ -307,9 +314,8 @@
 
     function switchTab(id, el) { document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active')); document.getElementById(id).classList.add('active'); document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active')); el.classList.add('active'); }
     function handleProfileUpload(i) { if (i.files && i.files[0]) { const r = new FileReader(); r.onload = (e) => { document.getElementById('profilePreview').src = e.target.result; }; r.readAsDataURL(i.files[0]); } }
-    function saveProfile() { const p = { name: document.getElementById('agentName').value, phone: document.getElementById('agentPhone').value, slogan: document.getElementById('agentSlogan').value, img: document.getElementById('profilePreview').src }; localStorage.setItem('simbaProfile_v18', JSON.stringify(p)); alert('✅ 儲存成功'); }
+    function saveProfile() { const p = { name: document.getElementById('agentName').value, phone: document.getElementById('agentPhone').value, slogan: document.getElementById('agentSlogan').value, img: document.getElementById('profilePreview').src }; localStorage.setItem('simbaProfile_v18', JSON.stringify(p)); alert('✅ 品牌設定已儲存'); }
     function loadProfile() { const s = JSON.parse(localStorage.getItem('simbaProfile_v18') || '{}'); document.getElementById('agentName').value=s.name||''; document.getElementById('agentPhone').value=s.phone||''; document.getElementById('agentSlogan').value=s.slogan||''; if(s.img) document.getElementById('profilePreview').src=s.img; }
-    function autoSellLoan() { const p = parseFloat(document.getElementById('sell_buyP').value); if(p) document.getElementById('sell_loanL').value = Math.round(p * 0.8); }
 </script>
 </body>
 </html>
