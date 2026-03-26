@@ -21,35 +21,42 @@
             --radius-l: 24px;
             --nav-height: 75px;
             --danger: #FF3B30;
-            --marquee-bg: #FF9500;
         }
 
         * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg-body); margin: 0; padding-top: 40px; color: var(--text-main); padding-bottom: calc(var(--nav-height) + 40px); user-select: none; overflow-x: hidden; }
         
-        /* --- 📢 跑馬燈強化 --- */
-        .marquee-container { position: fixed; top: 0; left: 0; width: 100%; height: 40px; background: var(--marquee-bg); border-bottom: 2px solid #FF3B30; z-index: 1000; overflow: hidden; display: flex; align-items: center; box-shadow: 0 2px 8px rgba(255,149,0,0.4); }
-        .marquee-text { white-space: nowrap; animation: marquee 15s linear infinite; color: #FFF; font-weight: 900; font-size: 1rem; cursor: pointer; padding-left: 100%; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); }
+        /* --- 📢 高速跑馬燈 (修正速度與字體) --- */
+        .marquee-container { position: fixed; top: 0; left: 0; width: 100%; height: 40px; background: rgba(255, 255, 255, 0.9); border-bottom: 1px solid #ddd; z-index: 1000; overflow: hidden; display: flex; align-items: center; }
+        .marquee-text { white-space: nowrap; animation: marquee 12s linear infinite; color: var(--primary); font-weight: 900; font-size: 1.1rem; cursor: pointer; padding-left: 100%; }
         @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-200%); } }
 
-        /* --- 啟動與鎖定 --- */
+        /* --- 鎖定畫面 --- */
         #splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--primary-gradient); z-index: 11000; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: 0.6s opacity; pointer-events: none; }
         #splash-screen.hidden { opacity: 0; visibility: hidden; }
         #lock-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #FFF; z-index: 10000; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 30px; }
-        .lock-content { background: white; padding: 20px; text-align: center; width: 100%; max-width: 360px; }
-        .lock-input { width: 100%; padding: 18px; font-size: 1.3rem; text-align: center; border: 2px solid #F2F2F7; border-radius: 20px; margin-bottom: 20px; font-weight: 800; color: var(--primary); outline: none; }
-        .lock-btn { background: var(--primary); color: white; width: 100%; padding: 18px; border: none; border-radius: 20px; font-size: 1.1rem; font-weight: 800; cursor: pointer; }
+        .lock-input { width: 100%; padding: 18px; font-size: 1.3rem; text-align: center; border: 2px solid #F2F2F7; border-radius: 20px; margin-bottom: 20px; font-weight: 800; color: var(--primary); outline: none; -webkit-user-select: text !important; user-select: text !important; }
+        .lock-btn { background: var(--primary); color: white; width: 100%; padding: 18px; border: none; border-radius: 20px; font-size: 1.1rem; font-weight: 800; }
 
         header { background: var(--primary-gradient); color: white; height: 60px; display: flex; align-items: center; justify-content: center; position: sticky; top: 40px; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .tier-badge { background: rgba(255,255,255,0.2); font-size: 0.65rem; padding: 2px 8px; border-radius: 6px; margin-left: 8px; border: 1px solid white; }
-
         .container { width: 100%; padding: 20px 15px; margin: 0 auto; max-width: 650px; }
-        .card { background: white; border-radius: var(--radius-l); padding: 25px; box-shadow: 0 4px 25px rgba(0,0,0,0.04); margin-bottom: 25px; position: relative; }
+        .card { background: white; border-radius: var(--radius-l); padding: 25px; box-shadow: 0 4px 25px rgba(0,0,0,0.04); margin-bottom: 25px; }
         h2 { font-size: 1.15rem; margin: 0 0 20px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
         h2::before { content: ''; width: 4px; height: 18px; background: var(--primary); border-radius: 2px; }
 
+        .mode-toggle { display: flex; background: #F2F2F7; border-radius: 14px; padding: 5px; margin-bottom: 25px; }
+        .toggle-btn { flex: 1; text-align: center; padding: 12px; font-size: 0.95rem; font-weight: 700; color: #8E8E93; border-radius: 11px; cursor: pointer; }
+        .toggle-btn.active { background: white; color: var(--primary); box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
+
         .form-group label { display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 8px; color: #444; }
-        input, select { width: 100%; padding: 15px; border: 1.5px solid #E5E5EA; border-radius: 14px; font-size: 1rem; margin-bottom: 12px; background: #FAFAFA; }
+        input, select { width: 100%; padding: 15px; border: 1.5px solid #E5E5EA; border-radius: 14px; font-size: 1rem; margin-bottom: 12px; background: #FAFAFA; -webkit-user-select: text !important; user-select: text !important; }
+
+        .check-item { display: flex; align-items: center; padding: 15px; background: #F9F9FB; border-radius: 14px; border: 1.5px solid #EEE; margin-bottom: 10px; cursor: pointer; }
+        .check-item.active { background: #E5F1FF; border-color: var(--primary); }
+        .check-box { width: 22px; height: 22px; border: 2px solid #CCC; border-radius: 6px; margin-right: 12px; display: flex; align-items: center; justify-content: center; background: white; }
+        .check-item.active .check-box { background: var(--primary); border-color: var(--primary); }
+        .check-box::after { content: '✓'; color: white; font-size: 14px; font-weight: bold; display: none; }
+        .check-item.active .check-box::after { display: block; }
 
         .btn-group { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
         button { padding: 18px; border-radius: 18px; border: none; font-weight: 800; font-size: 1.1rem; cursor: pointer; transition: 0.2s; }
@@ -58,8 +65,8 @@
 
         .res-area { margin-top: 30px; display: none; }
         .res-card { background: var(--primary-gradient); border-radius: 24px; padding: 30px 20px; color: white; text-align: center; }
+        .res-val-label { font-size: 0.9rem; opacity: 0.9; margin-bottom: 8px; font-weight: 700; }
         .res-val { font-size: 2.5rem; font-weight: 900; }
-        .res-explain { background: #E5F1FF; color: #0056B3; padding: 15px; border-radius: 15px; margin-top: 15px; font-size: 0.85rem; line-height: 1.6; white-space: pre-line; }
 
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 20000; overflow-y: auto; flex-direction: column; align-items: center; padding: 40px 15px; }
         .share-card { width: 100%; max-width: 400px; background: white; border-radius: 35px; overflow: hidden; flex-shrink: 0; }
@@ -67,27 +74,27 @@
         .share-body { padding: 30px; color: #1D1D1F; }
 
         .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 75px; background: rgba(255,255,255,0.95); backdrop-filter: blur(20px); border-top: 1px solid #EEE; display: flex; justify-content: space-around; align-items: center; z-index: 999; }
-        .nav-item { flex: 1; text-align: center; color: #8E8E93; font-size: 0.75rem; font-weight: 700; }
+        .nav-item { flex: 1; text-align: center; color: #8E8E93; font-size: 0.8rem; font-weight: 700; }
         .nav-item.active { color: var(--primary); }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        /* --- 管理員介面修正 --- */
         #adminPanel { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 30000; display: none; overflow-y: auto; padding: 20px; }
         .admin-tab-group { display: flex; background: #F2F2F7; padding: 5px; border-radius: 12px; margin-bottom: 20px; position: sticky; top: 0; z-index: 1001; }
         .admin-tab { flex: 1; text-align: center; padding: 10px; font-size: 0.85rem; font-weight: 700; color: #8E8E93; border-radius: 8px; cursor: pointer; }
         .admin-tab.active { background: white; color: var(--primary); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .user-list-item { background: #F9F9FB; padding: 15px; border-radius: 15px; margin-bottom: 12px; border: 1px solid #EEE; position: relative; }
-        .lead-card { background: #FFF; border: 1px solid #EEE; border-radius: 12px; padding: 15px; margin-bottom: 10px; font-size: 0.8rem; position: relative; }
+        .admin-delete-btn { background: #FF3B30; color: white; border: none; padding: 5px 10px; border-radius: 8px; font-size: 0.7rem; position: absolute; top: 15px; right: 15px; }
+        .lead-card { background: #FFF; border: 1px solid #EEE; border-radius: 12px; padding: 15px; margin-bottom: 10px; cursor: pointer; position: relative; }
     </style>
 </head>
 <body>
 
 <div id="splash-screen"><img src="image_24505e.png" style="width:100px;"><div style="color:white; font-weight:900; margin-top:15px;">房產精算師 PREMIUM</div></div>
 
-<div class="marquee-container" id="marqueeArea" style="display:none;"><div class="marquee-text" id="marqueeText" onclick="handleMarqueeClick()">正在加載最新更新與案源...</div></div>
+<div class="marquee-container" id="marqueeArea" style="display:none;"><div class="marquee-text" id="marqueeText" onclick="handleMarqueeClick()">正在加載精選案源與最新更新...</div></div>
 
-<div id="lock-screen"><div class="lock-content"><div class="lock-title">房產財務精算師</div><input type="tel" id="passcodeInput" class="lock-input" placeholder="請輸入註冊手機號碼"><button onclick="checkCloudAuth()" class="lock-btn">解除鎖定</button><div style="font-size:0.8rem; color:#8E8E93; margin-top:25px; line-height:1.6;">如尚未註冊，請洽管理員為您開通。</div></div></div>
+<div id="lock-screen"><div class="lock-content"><div class="lock-title">房產財務精算師</div><input type="tel" id="passcodeInput" class="lock-input" placeholder="請輸入註冊手機號碼"><button onclick="checkCloudAuth()" class="lock-btn">解除鎖定</button><div style="font-size:0.8rem; color:#8E8E93; margin-top:25px; line-height:1.6;">如尚未註冊，請洽管理員開通授權。</div></div></div>
 
 <header><h1>房產財務精算師 <span id="tierBadge" class="tier-badge"></span></h1></header>
 
@@ -102,15 +109,15 @@
                 <input type="number" id="sell_buyP" placeholder="買入價格 (萬)">
                 <input type="number" id="sell_sellP" placeholder="預計賣價 (萬)">
                 <input type="number" id="sell_loanL" placeholder="房貸餘額 (萬)">
-                <div class="check-item" id="item_isSelf" onclick="toggleCheck('isSelf')"><div class="check-box"></div><div class="check-label">符合自住 6 年免稅 (400萬額度)</div></div>
+                <div class="check-item" id="item_isSelf" onclick="toggleCheck('isSelf')"><div class="check-box"></div><div class="check-label">符合自住 6 年免稅 (400萬免稅額)</div></div>
                 <div class="check-item" id="item_isRefund" onclick="toggleCheck('isRefund')"><div class="check-box"></div><div class="check-label">擬使用「重購退稅」</div></div>
                 <div id="boxRefund" style="display:none; padding:15px; background:#F2F2F7; border-radius:14px; margin-bottom:10px;"><input type="number" id="sell_newP" placeholder="新購屋總價 (萬)"></div>
             </div>
-            <div class="btn-group"><button onclick="doSell()" class="btn-main">📊 開始獲利計算</button><button onclick="saveAndSync('sell')" class="btn-outline">📂 儲存並同步戰情室</button></div>
+            <div class="btn-group"><button onclick="doSell()" class="btn-main">📊 開始計算獲利</button><button onclick="saveAndSync('sell')" class="btn-outline">📂 儲存並同步戰情室</button></div>
             <div id="areaS" class="res-area">
-                <div class="res-card"><div style="font-size:0.9rem; opacity:0.9; margin-bottom:5px;">可實際拿回金額</div><div class="res-val" id="outC">0 萬</div></div>
+                <div class="res-card"><div class="res-val-label">可實際拿回金額</div><div class="res-val" id="outC">0 萬</div></div>
                 <div id="resExplainSell" class="res-explain"></div>
-                <button onclick="showShareCard('sell')" class="btn-main" style="margin-top:20px; background:var(--primary-gradient);">✨ 生成報表圖卡</button>
+                <button onclick="showShareCard('sell')" class="btn-main" style="margin-top:20px; background:var(--primary-gradient);">✨ 生成專業圖卡報表</button>
             </div>
         </div>
     </div>
@@ -122,44 +129,47 @@
             <div class="grid">
                 <input type="text" id="buy_cName" placeholder="客戶全名 *">
                 <input type="tel" id="buy_cPhone" placeholder="客戶手機 *">
-                <div id="groupBudget"><input type="number" id="buy_cash" placeholder="可用現金 (萬)"><input type="number" id="buy_monthly" placeholder="月還款預算 (萬)"></div>
+                <div id="groupBudget">
+                    <input type="number" id="buy_cash" placeholder="可用現金 (萬)">
+                    <input type="number" id="buy_monthly" placeholder="月還款預算 (萬)">
+                </div>
                 <div id="groupTarget" style="display:none;"><input type="number" id="buy_target" placeholder="房屋總價 (萬)"></div>
                 <div class="form-group"><label>預計購買區域</label><select id="buy_area">
-                    <option value="北屯區">北屯區</option><option value="西屯區">西屯區</option><option value="南屯區">南屯區</option><option value="北區">北區</option><option value="太平區">太平區</option><option value="豐原區">豐原區</option><option value="清水區">清水區</option><option value="外埔區">外埔區</option><option value="大安區">大安區</option><option value="其他">其他...</option>
+                    <option value="北屯區">北屯區</option><option value="西屯區">西屯區</option><option value="南屯區">南屯區</option><option value="北區">北區</option><option value="西區">西區</option><option value="南區">南區</option><option value="東區">東區</option><option value="中區">中區</option><option value="太平區">太平區</option><option value="大里區">大里區</option><option value="霧峰區">霧峰區</option><option value="烏日區">烏日區</option><option value="豐原區">豐原區</option><option value="后里區">后里區</option><option value="石岡區">石岡區</option><option value="東勢區">東勢區</option><option value="和平區">和平區</option><option value="新社區">新社區</option><option value="潭子區">潭子區</option><option value="大雅區">大雅區</option><option value="神岡區">神岡區</option><option value="大甲區">大甲區</option><option value="大安區">大安區</option><option value="外埔區">外埔區</option><option value="清水區">清水區</option><option value="梧棲區">梧棲區</option><option value="沙鹿區">沙鹿區</option><option value="龍井區">龍井區</option><option value="大肚區">大肚區</option>
                 </select></div>
                 <select id="buy_rate"><option value="2.18">2.18 % (地板價)</option><option value="2.5" selected>2.5 % (一般)</option></select>
                 <select id="buy_ltv"><option value="0.7">7 成</option><option value="0.75" selected>7.5 成</option><option value="0.8">8 成</option></select>
             </div>
             <div class="btn-group"><button onclick="doBuy()" class="btn-main">🔍 進行財務評估</button><button onclick="saveAndSync('buy')" class="btn-outline">📂 儲存並同步戰情室</button></div>
             <div id="areaB" class="res-area">
-                <div class="res-card"><div id="resBuyLabel" style="font-size:0.9rem; opacity:0.9; margin-bottom:5px;">建議購屋總價</div><div class="res-val" id="resBuyVal">0 萬</div></div>
+                <div class="res-card"><div class="res-val" id="resBuyVal">0 萬</div></div>
                 <div id="resExplainBuy" class="res-explain"></div>
-                <button onclick="showShareCard('buy')" class="btn-main" style="margin-top:20px; background:var(--primary-gradient);">✨ 生成報表圖卡</button>
+                <button onclick="showShareCard('buy')" class="btn-main" style="margin-top:20px; background:var(--primary-gradient);">✨ 生成專業圖卡報表</button>
             </div>
         </div>
     </div>
 
     <div id="tab-pk" class="tab-content">
         <div class="card">
-            <h2>⚖️ 租房 vs 買房 10年對決</h2>
+            <h2>⚖️ 租房 vs 買房 10年資產對決</h2>
             <div class="grid">
-                <input type="number" id="pkPrice" placeholder="購屋總價 (萬)">
+                <input type="number" id="pkPrice" placeholder="目標房價 (萬)">
                 <input type="number" id="pkRent" placeholder="月租金 (元)">
             </div>
-            <button onclick="doPK()" class="btn-main" style="margin-top:20px; background:#FF9500;">🥊 開始資產大對決</button>
+            <button onclick="doPK()" class="btn-main" style="margin-top:20px; background:orange;">🥊 開始 10 年資產大對決</button>
             <div id="areaPK" style="display:none; margin-top:25px;">
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
                     <div style="background:#FFF5F5; padding:20px 10px; border-radius:20px; text-align:center;"><span style="color:#EF4444; font-size:0.85rem; font-weight:700;">10年租金損失</span><div id="resRentTotal" style="font-size:1.3rem; font-weight:900; color:#EF4444;">0 萬</div></div>
                     <div style="background:#F0FDF4; padding:20px 10px; border-radius:20px; text-align:center;"><span style="color:#22C55E; font-size:0.85rem; font-weight:700;">10年房價增值</span><div id="resBuyGain" style="font-size:1.3rem; font-weight:900; color:#22C55E;">0 萬</div></div>
                 </div>
-                <div class="res-explain" style="background:#F2F2F7; color:#444;">數據告訴我們：付房租是幫房東繳房貸；買房則是強迫自己儲蓄。10 年後，差距將拉開數百萬甚至上千萬。</div>
+                <div class="res-explain" style="background:#F2F2F7; color:#444;">數據顯示：付租金是幫房東繳房貸；買房是強迫儲蓄。10 年差距將達數百萬甚至上千萬資產落差。</div>
             </div>
         </div>
     </div>
 
     <div id="tab-folder" class="tab-content">
         <div class="card">
-            <h2>📂 雲端客戶清單</h2>
+            <h2>📂 雲端客戶存檔</h2>
             <div id="limitDisplay" style="font-size:0.75rem; color:#8E8E93; text-align:center; margin-bottom:15px;"></div>
             <div id="folderList"></div>
         </div>
@@ -167,14 +177,13 @@
 
     <div id="tab-settings" class="tab-content">
         <div class="card" onclick="trackEntranceClick()">
-            <h2>👤 品牌設定</h2>
+            <h2>👤 個人品牌形象</h2>
             <div class="grid">
-                <input type="text" id="agentName" placeholder="姓名">
-                <input type="text" id="agentPhone" placeholder="電話">
-                <input type="email" id="agentEmail" placeholder="您的 Email (備份用)">
+                <input type="text" id="agentName" placeholder="對外真實姓名">
+                <input type="text" id="agentPhone" placeholder="您的聯絡電話">
+                <input type="email" id="agentEmail" placeholder="Email (接收自動備份)">
                 <button onclick="saveProfile()" class="btn-main">💾 儲存形象同步</button>
-                <div style="height:120px; width:100%;"></div>
-            </div>
+                <div style="height:120px; width:100%;"></div> </div>
         </div>
     </div>
 </div>
@@ -189,29 +198,32 @@
 
 <div id="adminPanel">
     <div class="admin-tab-group">
-        <div id="admTab1" class="admin-tab active" onclick="setAdminMode(1)">用戶</div>
-        <div id="admTab2" class="admin-tab" onclick="setAdminMode(2)">公告</div>
-        <div id="admTab3" class="admin-tab" onclick="setAdminMode(3)">雷達</div>
+        <div id="admTab1" class="admin-tab active" onclick="setAdminMode(1)">用戶管理</div>
+        <div id="admTab2" class="admin-tab" onclick="setAdminMode(2)">公告發布</div>
+        <div id="admTab3" class="admin-tab" onclick="setAdminMode(3)">買方雷達</div>
     </div>
     <div id="admSection1">
         <div class="grid" style="border-bottom:1px solid #EEE; padding-bottom:15px; margin-bottom:15px;">
-            <input type="text" id="adm_phone" placeholder="開通門號"><input type="text" id="adm_name" placeholder="姓名">
+            <input type="text" id="adm_phone" placeholder="開通門號"><input type="text" id="adm_name" placeholder="使用者姓名">
             <button onclick="createNewUser()" class="btn-main" style="padding:10px;">手動開通</button>
         </div>
         <div id="userTable"></div>
     </div>
     <div id="admSection2" style="display:none;">
-        <input type="text" id="adm_msg" placeholder="跑馬燈公告"><input type="text" id="adm_link" placeholder="連結網址"><button onclick="publishMarquee()" class="btn-main">發布全員</button>
+        <input type="text" id="adm_msg" placeholder="公告跑馬燈內容"><input type="text" id="adm_link" placeholder="連結網址"><button onclick="publishMarquee()" class="btn-main">發布公告</button>
     </div>
-    <div id="admSection3" style="display:none;">
-        <button onclick="exportLeads()" class="btn-outline" style="width:100%; margin-bottom:15px;">📊 匯出完整 Excel</button>
-        <div id="leadsList"></div>
-    </div>
+    <div id="admSection3" style="display:none;"><button onclick="exportLeads()" class="btn-outline" style="width:100%; margin-bottom:15px;">📊 匯出 Excel</button><div id="leadsList"></div></div>
     <button onclick="document.getElementById('adminPanel').style.display='none'" class="btn-outline" style="width:100%; margin-top:30px; border:none; color:#8E8E93;">關閉戰情室</button>
 </div>
 
+<div id="shareCardModal" class="modal">
+    <div class="share-card"><div class="share-header"><div id="cardClientTitle" style="font-weight:900; font-size:1.1rem;"></div></div><div class="share-body" id="cardBody"></div></div>
+    <button onclick="handleNativeShare()" class="lock-btn" style="margin-top:20px; width:300px;">📲 一鍵分享至 Line</button>
+    <button onclick="document.getElementById('shareCardModal').style.display='none'" class="modal-close-btn" style="color:white; margin-top:10px;">關閉</button>
+</div>
+
 <script>
-    // --- 1. 初始化 ---
+    // --- 1. 初始化與啟動 ---
     const firebaseConfig = {
         apiKey: "AIzaSyDv3-2psunhNzjbTIY38L8jbVf2wmO5WEw",
         authDomain: "simbaapp-62d40.firebaseapp.com",
@@ -254,8 +266,8 @@
         db.ref('users/' + phone).once('value', (s) => {
             const d = s.val();
             if (d && d.status === 'active') { localStorage.setItem('simba_phone', phone); location.reload(); }
-            else if (d && d.status === 'blocked') { alert("❌ 此帳號封鎖中"); }
-            else { alert("❌ 門號尚未授權。"); }
+            else if (d && d.status === 'blocked') { alert("❌ 此帳號已被封鎖。"); }
+            else { alert("❌ 門號尚未授權，請洽管理員。"); }
         });
     }
 
@@ -265,7 +277,7 @@
         if(id === 'isRefund') document.getElementById('boxRefund').style.display = checks[id] ? 'block' : 'none';
     }
 
-    // --- 💰 售屋 + 🏠 購屋 + ⚖️ PK 核心邏輯 ---
+    // --- 💰 售屋 + 🏠 購屋 + ⚖️ PK ---
     function doSell() {
         const bP = parseFloat(document.getElementById('sell_buyP').value)||0, sP = parseFloat(document.getElementById('sell_sellP').value)||0;
         const loan = parseFloat(document.getElementById('sell_loanL').value)||0, bD = document.getElementById('sell_buyDate').value;
@@ -277,7 +289,7 @@
         sellRes = { cash: Math.round(cash), fee: Math.round(fee), tax: Math.round(tax), refund: Math.round(refund), misc: Math.round(misc), profit: Math.round(profit), sP };
         document.getElementById('areaS').style.display = 'block';
         document.getElementById('outC').innerText = sellRes.cash + " 萬";
-        document.getElementById('resExplainSell').innerText = `白話解析：\n1. 扣除 4% 服務費：${sellRes.fee} 萬\n2. 扣除稅費規費(1%)：${sellRes.misc} 萬\n3. 應繳稅額：${sellRes.tax} 萬\n4. 重購退稅補回：${sellRes.refund} 萬\n最終實際拿回：${sellRes.cash} 萬。`;
+        document.getElementById('resExplainSell').innerText = `白話解析：\n1. 扣除 4% 服務費：${sellRes.fee} 萬\n2. 扣除規費與稅金：${sellRes.misc + sellRes.tax} 萬\n3. 重購退稅補回：${sellRes.refund} 萬\n最終實際拿回金額：${sellRes.cash} 萬。`;
     }
 
     function doBuy() {
@@ -295,7 +307,7 @@
             fP = parseFloat(document.getElementById('buy_target').value)||0; if(!fP) return;
             fL = fP * ltv; rC = (fP * (1 - ltv)) + (fP * 0.05);
             document.getElementById('resBuyVal').innerText = Math.round(rC) + " 萬";
-            document.getElementById('resExplainBuy').innerText = `解析：總價 ${fP} 萬房屋，頭期約 ${Math.round(fP*(1-ltv))} 萬，稅費服務費約 ${Math.round(fP*0.05)} 萬，共需準備 ${Math.round(rC)} 萬。`;
+            document.getElementById('resExplainBuy').innerText = `解析：總價 ${fP} 萬房屋，頭期約 ${Math.round(fP*(1-ltv))} 萬，稅費服務費約 ${Math.round(fP*0.05)} 萬，共需準備 ${Math.round(rC)} 萬現金。`;
         }
         buyRes = { fP:Math.round(fP), fL:Math.round(fL), nPay:Math.round(fL*10000*fact), ltv:ltv*10, rC:Math.round(rC), mode:currentBuyMode };
         document.getElementById('areaB').style.display = 'block';
@@ -309,7 +321,7 @@
         document.getElementById('resBuyGain').innerText = Math.round(p * 0.34) + " 萬";
     }
 
-    // --- 📂 雲端同步與 Email ---
+    // --- 📂 雲端與同步 ---
     async function saveAndSync(type) {
         const name = document.getElementById(type+'_cName').value.trim();
         const phone = document.getElementById(type+'_cPhone').value.trim();
@@ -323,9 +335,9 @@
         db.ref(`users/${myPhone}/customers/${timestamp}`).set(packet);
         db.ref(`admin/leads/${myPhone}_${timestamp}`).set(packet);
 
-        // 📧 Email 發送 (請替換 Template ID)
+        // 📧 寄信給業務並抄送給 Simba
         if(myData.tier !== '普通用戶' && myData.email) {
-            emailjs.send("service_n8xoxi3", "YOUR_TEMPLATE_ID", { to_email: myData.email, client_name: name, summary: `${res.cash||res.fP}萬` });
+            emailjs.send("service_n8xoxi3", "YOUR_TEMPLATE_ID", { to_email: myData.email, client_name: name, summary: `${res.cash||res.fP}萬`, admin_copy: "simba@example.com" });
         }
         alert("✅ 儲存成功！資料已同步。"); refreshFolder();
     }
@@ -346,12 +358,12 @@
 
     function deleteClient(k) { if(confirm('確定要刪除資訊嗎？無法復原')) db.ref(`users/${myPhone}/customers/${k}`).remove(); }
 
-    // --- 🔑 管理員權限 (隱藏點擊 3 次進入) ---
+    // --- 🔑 管理員最高權限 ---
     function trackEntranceClick() {
         entranceCounter++;
         if(entranceCounter >= 3) {
             entranceCounter = 0;
-            if(prompt("管理員暗號：") === 'Simba') { document.getElementById('adminPanel').style.display='block'; refreshAdminUsers(); refreshLeads(); }
+            if(prompt("系統密語：") === 'Simba') { document.getElementById('adminPanel').style.display='block'; refreshAdminUsers(); refreshLeads(); }
         }
         setTimeout(()=>entranceCounter=0, 3000);
     }
@@ -367,7 +379,7 @@
                         <option value="普通用戶" ${u.tier==='普通用戶'?'selected':''}>普通用戶</option>
                         <option value="VIP用戶" ${u.tier==='VIP用戶'?'selected':''}>VIP用戶</option>
                         <option value="VVIP用戶" ${u.tier==='VVIP用戶'?'selected':''}>VVIP用戶</option>
-                        <option value="blocked" ${u.status==='blocked'?'selected':''}>封鎖</option>
+                        <option value="blocked" ${u.status==='blocked'?'selected':''}>封鎖帳號</option>
                     </select>
                     <button class="admin-delete-btn" onclick="adminDeleteUser('${p}')">刪除</button>
                 </div>`;
@@ -376,13 +388,23 @@
         });
     }
 
+    function adminDeleteUser(p) { if(confirm(`徹底刪除帳號 ${p}？`)) db.ref('users/' + p).remove().then(()=>refreshAdminUsers()); }
+    function adminDeleteLead(e, k) { e.stopPropagation(); if(confirm('從雷達移除這筆資料？')) db.ref('admin/leads/' + k).remove(); }
+    function updateUserTier(p, t) { db.ref('users/' + p).update({ tier: t, status: (t==='blocked'?'blocked':'active') }); }
+    function createNewUser() {
+        const p = document.getElementById('adm_phone').value.trim(), n = document.getElementById('adm_name').value.trim();
+        if(!p || !n) return;
+        db.ref('users/'+p).set({ name: n, status: 'active', tier: '普通用戶' }).then(()=>refreshAdminUsers());
+        alert("✅ 開通成功");
+    }
+
     function refreshLeads() {
         db.ref('admin/leads').on('value', (s) => {
-            const leads = s.val()||{}; let h = "<b>買方雷達動態 (點擊可看明細)：</b><br>";
+            const leads = s.val()||{}; let h = "<b>買方雷達 (點擊查詳細細節)：</b><br>";
             Object.keys(leads).forEach(k => {
                 const l = leads[k]; 
                 h += `<div class="lead-card" onclick="viewLeadDetail('${k}')">
-                    [${l.agentName}] 開發了 ${l.name}<br>金額：${l.data.cash||l.data.fP}萬 | 區域：${l.area}
+                    [${l.agentName}] -> ${l.name}<br>金額：${l.data.cash||l.data.fP}萬 | 區域：${l.area}
                     <button style="position:absolute; right:10px; top:10px; color:red; border:none; background:none;" onclick="adminDeleteLead(event, '${k}')">刪</button>
                 </div>`;
             });
@@ -393,18 +415,8 @@
     function viewLeadDetail(k) {
         db.ref('admin/leads/' + k).once('value', (s) => {
             const l = s.val();
-            alert(`【完整資訊】\n客戶：${l.name}\n手機：${l.phone}\n金額：${l.data.cash||l.data.fP} 萬\n區域：${l.area}\n業務：${l.agentName}\n日期：${l.date}`);
+            alert(`【買方詳細需求】\n客戶：${l.name}\n手機：${l.phone}\n金額：${l.data.cash||l.data.fP} 萬\n區域：${l.area}\n業務：${l.agentName}\n日期：${l.date}`);
         });
-    }
-
-    function adminDeleteUser(p) { if(confirm(`徹底刪除帳號 ${p}？`)) db.ref('users/' + p).remove().then(()=>refreshAdminUsers()); }
-    function adminDeleteLead(e, k) { e.stopPropagation(); if(confirm('從雷達移除？')) db.ref('admin/leads/' + k).remove(); }
-    function updateUserTier(p, t) { db.ref('users/' + p).update({ tier: t, status: (t==='blocked'?'blocked':'active') }); }
-    function createNewUser() {
-        const p = document.getElementById('adm_phone').value.trim(), n = document.getElementById('adm_name').value.trim();
-        if(!p || !n) return;
-        db.ref('users/'+p).set({ name: n, status: 'active', tier: '普通用戶' }).then(()=>refreshAdminUsers());
-        alert("✅ 已開通");
     }
 
     function publishMarquee() { db.ref('system/broadcast').set({ text: document.getElementById('adm_msg').value, link: document.getElementById('adm_link').value }).then(()=>alert("✅ 公告更新")); }
@@ -422,36 +434,31 @@
             const leads = s.val(); Object.values(leads).forEach(l => csv += `${l.agentName},${l.name},${l.phone},${l.area},${l.data.sP||l.data.fP},${l.date}\n`);
             const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement("a"); link.href = URL.createObjectURL(blob);
-            link.download = "Simba戰情室名單.csv"; link.click();
+            link.download = "戰情室名單.csv"; link.click();
         });
     }
 
     // --- 4. 分享與 UI ---
     function showShareCard(type) {
-        if(myData.tier === '普通用戶') { alert("❌ 普通版不支援生成圖卡。"); return; }
+        if(myData.tier === '普通用戶') { alert("❌ 普通版不支援生成報表。"); return; }
         const cName = document.getElementById(type+'_cName').value || "客戶";
         document.getElementById('cardClientTitle').innerText = `${cName} 專屬分析報告`;
         const body = document.getElementById('cardBody');
         const res = type === 'sell' ? sellRes : buyRes;
         if(type === 'sell') {
-            body.innerHTML = `<div class="share-hero-box"><span style="font-size:0.8rem;">預計實際拿回</span><div class="share-hero-val">$ ${res.cash} 萬</div></div><div class="share-detail-row"><span>服務費(4%)</span><span>${res.fee} 萬</span></div><div class="share-detail-row"><span>稅費規費</span><span>${res.tax + res.misc} 萬</span></div>`;
+            body.innerHTML = `<div class="share-hero-box"><span style="font-size:0.8rem;">預計實際拿回</span><div class="share-hero-val">$ ${res.cash} 萬</div></div><div class="share-detail-row"><span>稅後淨利</span><span>+${res.profit} 萬</span></div><div class="share-detail-row"><span>服務費(4%)</span><span>${res.fee} 萬</span></div>`;
         } else {
-            body.innerHTML = `<div class="share-hero-box"><span style="font-size:0.8rem;">建議購屋總價</span><div class="share-hero-val">${res.fP} 萬</div></div><div class="share-detail-row"><span>月攤還</span><span style="color:var(--primary); font-weight:800;">${res.nPay.toLocaleString()} 元</span></div><div class="share-detail-row"><span>自備+規費</span><span>${res.rC} 萬</span></div>`;
+            body.innerHTML = `<div class="share-hero-box"><span style="font-size:0.8rem;">建議購屋總價</span><div class="share-hero-val">${res.fP} 萬</div></div><div class="share-detail-row"><span>月攤還預算</span><span style="color:var(--primary); font-weight:800;">${res.nPay.toLocaleString()} 元</span></div><div class="share-detail-row"><span>需備總資金</span><span>${res.rC} 萬</span></div>`;
         }
         document.getElementById('shareCardModal').style.display = 'flex';
     }
 
     function handleNativeShare() {
-        if (navigator.share) { navigator.share({ title: '報告', text: document.getElementById('cardClientTitle').innerText, url: window.location.href }); }
+        if (navigator.share) { navigator.share({ title: '報表', text: document.getElementById('cardClientTitle').innerText, url: window.location.href }); }
         else { alert("連結已複製"); }
     }
 
-    function switchTab(id, el) { 
-        document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active')); 
-        document.getElementById(id).classList.add('active'); 
-        document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active')); 
-        el.classList.add('active'); 
-    }
+    function switchTab(id, el) { document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active')); document.getElementById(id).classList.add('active'); document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active')); el.classList.add('active'); }
     function setBuyMode(m) { currentBuyMode=m; document.getElementById('btnModeB').classList.toggle('active', m==='budget'); document.getElementById('btnModeT').classList.toggle('active', m==='target'); document.getElementById('groupBudget').style.display=(m==='budget'?'block':'none'); document.getElementById('groupTarget').style.display=(m==='target'?'block':'none'); }
     function saveProfile() { db.ref('users/'+myPhone).update({ name: document.getElementById('agentName').value, email: document.getElementById('agentEmail').value }); alert("✅ 形象同步成功"); }
     function loadProfile() { if(!myPhone) return; db.ref('users/'+myPhone).once('value', (s) => { const d=s.val(); if(d){ document.getElementById('agentName').value=d.name||""; document.getElementById('agentEmail').value=d.email||""; } }); }
