@@ -710,7 +710,106 @@
             link.download = "Simba戰情室-買方總表.csv"; link.click();
         });
     }
+// --- 🔑 管理員戰情室 (暗號觸發與後台邏輯) ---
+    let entranceTimer = null;
+    function trackEntranceClick() {
+        entranceCounter++;
+        clearTimeout(entranceTimer);
+        if(entranceCounter >= 3) {
+            entranceCounter = 0;
+            if(prompt("系統密語：") === 'Simba') { 
+                document.getElementById('adminPanel').style.display='block'; 
+                refreshAdminUsers(); 
+                refreshLeads(); 
+            } else {
+                alert("密語錯誤，權限不足。");
+            }
+        } else {
+            entranceTimer = setTimeout(() => entranceCounter=0, 2000);
+        }
+    }
 
+    function refreshAdminUsers() {
+        db.ref('users').once('value', (s) => {
+            const users = s.val(); let h = "";
+            if(!users) return;
+            Object.keys(users).forEach(p => {
+                const u = users[p];
+                h += `
+                <div class="user-list-item" style="background: #F9F9FB; padding: 15px; border-radius: 15px; margin-bottom: 12px; border: 1px solid #EEE;">
+                    <b>${u.name}</b> (${p})<br>
+                    權限：<select onchange="updateUserTier('${p}', this.value)" style="padding:5px; border-radius:6px; margin-top:5px;">
+                        <option value="普通版" ${u.tier==='普通版'?'selected':''}>普通版 (499/月)</option>
+                        <option value="店長版" ${u.tier==='店長版'?'selected':''}>店長版 (25000/年)</option>
+                        <option value="blocked" ${u.status==='blocked'?'selected':''}>🚫 封鎖帳號</option>
+                    </select>
+                    <button style="float:right; background:var(--danger, #FF3B30); color:white; border:none; padding:6px 12px; border-radius:8px; font-size:0.75rem; cursor:pointer;" onclick="adminDeleteUser('${p}')">徹底刪除</button>
+                </div>`;
+            });
+            document.getElementById('userTable').innerHTML = h;
+        });
+    }
+
+    function adminDeleteUser(p) { if(confirm(`確定徹底刪除帳號 ${p}？資料將全部遺失。`)) db.ref('users/' + p).remove().then(()=>refreshAdminUsers()); }
+    function adminDeleteLead(e, k) { e.stopPropagation(); if(confirm('要從雷達中刪除這筆資料嗎？')) db.ref('admin/leads/' + k).remove(); }
+    
+    function updateUserTier(p, t) { 
+        db.ref('users/' + p).update({ tier: t, status: (t==='blocked'?'blocked':'active') }); 
+        alert("✅ 方案已更新 (若為封鎖，對方將即刻強制登出)");
+    }
+    
+    function createNewUser() { 
+        const p = document.getElementById('adm_phone').value.trim();
+        const n = document.getElementById('adm_name').value.trim(); 
+        if(!p || !n) { alert("請輸入手機與姓名"); return; }
+        db.ref('users/'+p).set({ name: n, status: 'active', tier: '普通版' }).then(()=>refreshAdminUsers()); 
+        alert("✅ 開通成功，預設為普通版"); 
+    }
+
+    function publishMarquee() { 
+        db.ref('system/broadcast').set({ text: document.getElementById('adm_msg').value, link: document.getElementById('adm_link').value }).then(()=>alert("✅ 跑馬燈公告已全網更新")); 
+    }
+
+    function refreshLeads() {
+        db.ref('admin/leads').on('value', (s) => {
+            const leads = s.val()||{}; let h = "<b>買方雷達 (點擊卡片查看詳細需求)：</b><br>";
+            Object.keys(leads).forEach(k => { 
+                const l = leads[k]; 
+                h += `
+                <div class="lead-card" style="background: #FFF; border: 1px solid #EEE; border-radius: 12px; padding: 18px; margin-bottom: 12px; cursor: pointer; position: relative;" onclick="viewLeadDetail('${k}')">
+                    [${l.agentName}] -> ${l.name} (${l.area||'未指定'})
+                    <button class="lead-delete-btn" style="position: absolute; right: 15px; top: 15px; color: #FF3B30; background: #FFF5F5; border: none; border-radius: 6px; padding: 5px 10px; font-size: 0.7rem; font-weight: bold; cursor: pointer;" onclick="adminDeleteLead(event, '${k}')">刪除</button>
+                </div>`; 
+            });
+            document.getElementById('leadsList').innerHTML = h;
+        });
+    }
+
+    function viewLeadDetail(k) { 
+        db.ref('admin/leads/' + k).once('value', (s) => { 
+            const l = s.val(); 
+            alert(`【精準買方情報】\n\n開發業務：${l.agentName}\n客戶姓名：${l.name}\n聯絡電話：${l.phone}\n\n預算/總價：${l.data.cash||l.data.fP} 萬\n鎖定區域：${l.area||'未指定'}\n\n建立日期：${l.date}`); 
+        }); 
+    }
+
+    function setAdminMode(n) { 
+        for(let i=1; i<=3; i++) { 
+            document.getElementById('admSection'+i).style.display = (i===n?'block':'none'); 
+            document.getElementById('admTab'+i).classList.toggle('active', i===n); 
+        } 
+    }
+
+    function exportLeads() {
+        let csv = "開發業務,客戶姓名,客戶手機,鎖定區域,金額(萬),建立日期\n";
+        db.ref('admin/leads').once('value', (s) => {
+            const leads = s.val(); 
+            if(!leads) return;
+            Object.values(leads).forEach(l => csv += `${l.agentName},${l.name},${l.phone},${l.area||'N/A'},${l.data.sP||l.data.fP},${l.date}\n`);
+            const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a"); link.href = URL.createObjectURL(blob);
+            link.download = "Simba戰情室-買方總表.csv"; link.click();
+        });
+    }
     function showShareCard(type) {
         if(myData.tier === '普通用戶') { alert("❌ 抱歉，普通版不支援生成專業報表，請洽管理員升級。"); return; }
         
