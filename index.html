@@ -25,24 +25,22 @@
         }
 
         * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg-body); margin: 0; padding-top: 55px; color: var(--text-main); padding-bottom: calc(var(--nav-height) + 40px); user-select: none; overflow-x: hidden; }
+        body { background: var(--bg-body); margin: 0; padding-top: 80px; color: var(--text-main); padding-bottom: calc(var(--nav-height) + 40px); user-select: none; overflow-x: hidden; }
         
-        /* --- 📢 高速間歇跑馬燈 --- */
-        .marquee-container { position: fixed; top: 0; left: 0; width: 100%; height: 55px; background: rgba(255, 255, 255, 0.95); border-bottom: 2.5px solid var(--primary); z-index: 1000; overflow: hidden; display: flex; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .marquee-text { white-space: nowrap; animation: marquee 14s linear infinite; color: var(--primary); font-weight: 900; font-size: 1.25rem; cursor: pointer; text-shadow: 0 0 8px rgba(0,122,255,0.3); }
-        /* 動畫設計：跑出螢幕後停留，製造約 3 秒的空白間隔再重新出現 */
-        @keyframes marquee { 0% { transform: translateX(100vw); } 75% { transform: translateX(-250vw); } 100% { transform: translateX(-250vw); } }
+        /* --- 📢 超巨型、慢速霓虹跑馬燈 --- */
+        .marquee-container { position: fixed; top: 0; left: 0; width: 100%; height: 80px; background: rgba(255, 255, 255, 0.95); border-bottom: 3px solid var(--primary); z-index: 1000; overflow: hidden; display: flex; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .marquee-text { white-space: nowrap; animation: marquee 25s linear infinite; color: var(--primary); font-weight: 900; font-size: 2.2rem; cursor: pointer; padding-left: 100vw; text-shadow: 0 0 8px rgba(0,122,255,0.25); letter-spacing: 2px; }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-350vw); } }
 
-        /* --- 啟動與鎖定畫面 --- */
+        /* --- 啟動與鎖定 --- */
         #splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--primary-gradient); z-index: 11000; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: 0.6s opacity; pointer-events: none; }
         #splash-screen.hidden { opacity: 0; visibility: hidden; }
         #lock-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #FFF; z-index: 10000; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 30px; }
-        .lock-content { background: white; padding: 25px; text-align: center; width: 100%; max-width: 360px; }
-        .lock-title { font-size: 1.6rem; font-weight: 900; color: var(--primary); margin-bottom: 10px; letter-spacing: -1px; }
-        .lock-input { width: 100%; padding: 18px; font-size: 1.3rem; text-align: center; border: 2.5px solid #F2F2F7; border-radius: 20px; margin-bottom: 20px; font-weight: 800; color: var(--primary); outline: none; -webkit-user-select: text !important; user-select: text !important; }
+        .lock-content { background: white; padding: 20px; text-align: center; width: 100%; max-width: 360px; }
+        .lock-input { width: 100%; padding: 18px; font-size: 1.3rem; text-align: center; border: 2px solid #F2F2F7; border-radius: 20px; margin-bottom: 20px; font-weight: 800; color: var(--primary); outline: none; -webkit-user-select: text !important; user-select: text !important; }
         .lock-btn { background: var(--primary); color: white; width: 100%; padding: 18px; border: none; border-radius: 20px; font-size: 1.1rem; font-weight: 800; cursor: pointer; box-shadow: 0 8px 25px rgba(0,122,255,0.3); }
 
-        header { background: var(--primary-gradient); color: white; height: 60px; display: flex; align-items: center; justify-content: center; position: sticky; top: 55px; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        header { background: var(--primary-gradient); color: white; height: 60px; display: flex; align-items: center; justify-content: center; position: sticky; top: 80px; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         .tier-badge { background: rgba(255,255,255,0.2); font-size: 0.65rem; padding: 2px 8px; border-radius: 6px; margin-left: 8px; border: 1px solid white; }
 
         .container { width: 100%; padding: 20px 15px; margin: 0 auto; max-width: 650px; }
@@ -50,13 +48,17 @@
         h2 { font-size: 1.15rem; margin: 0 0 20px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
         h2::before { content: ''; width: 4px; height: 18px; background: var(--primary); border-radius: 2px; }
 
-        /* --- 模式切換按鈕 (恢復設計) --- */
+        /* --- 區域多選標籤 --- */
+        .area-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px; }
+        .area-tag { padding: 8px 12px; background: #F2F2F7; border-radius: 10px; font-size: 0.85rem; font-weight: 600; color: #8E8E93; cursor: pointer; border: 1px solid transparent; transition: 0.2s; }
+        .area-tag.active { background: var(--primary); color: white; border-color: var(--primary); }
+
         .mode-toggle { display: flex; background: #F2F2F7; border-radius: 16px; padding: 5px; margin-bottom: 25px; border: 1px solid #E5E5EA; }
         .toggle-btn { flex: 1; text-align: center; padding: 14px; font-size: 0.95rem; font-weight: 800; color: #8E8E93; border-radius: 12px; cursor: pointer; transition: 0.3s; border: none; background: none; }
         .toggle-btn.active { background: white; color: var(--primary); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
 
         .form-group label { display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 8px; color: #444; }
-        input, select { width: 100%; padding: 15px; border: 1.5px solid #E5E5EA; border-radius: 14px; font-size: 1rem; margin-bottom: 12px; background: #FAFAFA; -webkit-appearance: none; -webkit-user-select: text !important; user-select: text !important; }
+        input, select { width: 100%; padding: 15px; border: 1.5px solid #E5E5EA; border-radius: 14px; font-size: 1rem; margin-bottom: 12px; background: #FAFAFA; -webkit-user-select: text !important; user-select: text !important; }
 
         .check-item { display: flex; align-items: center; padding: 15px; background: #F9F9FB; border-radius: 14px; border: 1.5px solid #EEE; margin-bottom: 10px; cursor: pointer; }
         .check-item.active { background: #E5F1FF; border-color: var(--primary); }
@@ -74,8 +76,9 @@
         .res-card { background: var(--primary-gradient); border-radius: 24px; padding: 30px 20px; color: white; text-align: center; }
         .res-val-label { font-size: 0.95rem; font-weight: 700; opacity: 0.9; margin-bottom: 5px; }
         .res-val { font-size: 2.5rem; font-weight: 900; }
-        .res-explain { background: #E5F1FF; color: #0056B3; padding: 18px; border-radius: 15px; margin-top: 15px; font-size: 0.85rem; line-height: 1.6; white-space: pre-line; font-weight: 600; }
+        .res-explain { background: #E5F1FF; color: #0056B3; padding: 20px; border-radius: 15px; margin-top: 15px; font-size: 0.9rem; line-height: 1.7; white-space: pre-line; font-weight: 600; text-align: left; }
 
+        /* --- PDF & Modal --- */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 20000; overflow-y: auto; flex-direction: column; align-items: center; padding: 40px 15px; }
         .share-card { width: 100%; max-width: 400px; background: white; border-radius: 35px; overflow: hidden; flex-shrink: 0; box-shadow: 0 40px 80px rgba(0,0,0,0.4); }
         .share-header { background: var(--primary-gradient); padding: 35px 25px; color: white; text-align: center; }
@@ -91,7 +94,7 @@
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        /* --- 管理後台戰情室 --- */
+        /* --- 管理後台 --- */
         #adminPanel { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 30000; display: none; overflow-y: auto; padding: 20px; }
         .admin-tab-group { display: flex; background: #F2F2F7; padding: 5px; border-radius: 12px; margin-bottom: 20px; position: sticky; top: 0; z-index: 1001; }
         .admin-tab { flex: 1; text-align: center; padding: 12px; font-size: 0.85rem; font-weight: 700; color: #8E8E93; border-radius: 8px; cursor: pointer; }
@@ -177,10 +180,10 @@
                     <input type="number" id="buy_target" placeholder="房屋目標總價 (萬)">
                 </div>
                 <div class="form-group">
-                    <label>預計購買區域</label>
-                    <select id="buy_area">
-                        <option value="中區">中區</option><option value="東區">東區</option><option value="南區">南區</option><option value="西區">西區</option><option value="北區">北區</option><option value="北屯區" selected>北屯區</option><option value="西屯區">西屯區</option><option value="南屯區">南屯區</option><option value="太平區">太平區</option><option value="大里區">大里區</option><option value="霧峰區">霧峰區</option><option value="烏日區">烏日區</option><option value="豐原區">豐原區</option><option value="后里區">后里區</option><option value="石岡區">石岡區</option><option value="東勢區">東勢區</option><option value="和平區">和平區</option><option value="新社區">新社區</option><option value="潭子區">潭子區</option><option value="大雅區">大雅區</option><option value="神岡區">神岡區</option><option value="大甲區">大甲區</option><option value="清水區">清水區</option><option value="沙鹿區">沙鹿區</option><option value="梧棲區">梧棲區</option><option value="后里區">后里區</option><option value="外埔區">外埔區</option><option value="大安區">大安區</option><option value="龍井區">龍井區</option><option value="大肚區">大肚區</option>
-                    </select>
+                    <label>預計購買區域 (可多選)</label>
+                    <div class="area-grid">
+                        <div class="area-tag" onclick="toggleArea(this)">中區</div><div class="area-tag" onclick="toggleArea(this)">東區</div><div class="area-tag" onclick="toggleArea(this)">南區</div><div class="area-tag" onclick="toggleArea(this)">西區</div><div class="area-tag" onclick="toggleArea(this)">北區</div><div class="area-tag" onclick="toggleArea(this)">北屯區</div><div class="area-tag" onclick="toggleArea(this)">西屯區</div><div class="area-tag" onclick="toggleArea(this)">南屯區</div><div class="area-tag" onclick="toggleArea(this)">太平區</div><div class="area-tag" onclick="toggleArea(this)">大里區</div><div class="area-tag" onclick="toggleArea(this)">霧峰區</div><div class="area-tag" onclick="toggleArea(this)">烏日區</div><div class="area-tag" onclick="toggleArea(this)">豐原區</div><div class="area-tag" onclick="toggleArea(this)">后里區</div><div class="area-tag" onclick="toggleArea(this)">石岡區</div><div class="area-tag" onclick="toggleArea(this)">東勢區</div><div class="area-tag" onclick="toggleArea(this)">和平區</div><div class="area-tag" onclick="toggleArea(this)">新社區</div><div class="area-tag" onclick="toggleArea(this)">潭子區</div><div class="area-tag" onclick="toggleArea(this)">大雅區</div><div class="area-tag" onclick="toggleArea(this)">神岡區</div><div class="area-tag" onclick="toggleArea(this)">大甲區</div><div class="area-tag" onclick="toggleArea(this)">清水區</div><div class="area-tag" onclick="toggleArea(this)">沙鹿區</div><div class="area-tag" onclick="toggleArea(this)">梧棲區</div><div class="area-tag" onclick="toggleArea(this)">外埔區</div><div class="area-tag" onclick="toggleArea(this)">大安區</div><div class="area-tag" onclick="toggleArea(this)">龍井區</div><div class="area-tag" onclick="toggleArea(this)">大肚區</div>
+                    </div>
                 </div>
                 <select id="buy_rate">
                     <option value="2.18">2.18 % (地板價)</option>
@@ -249,14 +252,19 @@
         <div class="card">
             <h2>👤 個人品牌設定</h2>
             <div class="grid">
+                <div style="text-align:center; margin-bottom:20px;">
+                    <div style="width:100px; height:100px; margin:0 auto; overflow:hidden; border-radius:50%; border:3px solid var(--primary); cursor:pointer;" onclick="document.getElementById('profileImgInput').click()">
+                        <img id="profilePreview" src="image_24505e.png" style="width:100%; height:100%; object-fit:cover;">
+                    </div>
+                    <input type="file" id="profileImgInput" accept="image/*" style="display:none;" onchange="handleProfileUpload(this)">
+                </div>
                 <input type="text" id="agentName" placeholder="您的真實姓名">
                 <input type="text" id="agentPhone" placeholder="您的聯絡電話">
                 <input type="email" id="agentEmail" placeholder="Email (接收自動備份用)">
                 <button onclick="saveProfile()" class="btn-main">💾 儲存形象同步</button>
-                <div style="height:150px; width:100%; cursor:default;" onclick="trackEntranceClick()"></div>
             </div>
         </div>
-        <div style="height:150px; width:100%; cursor:default;" onclick="trackEntranceClick()"></div> 
+        <div style="height:150px; width:100%; cursor:default;" onclick="trackEntranceClick()"></div>
     </div>
 </div>
 
@@ -306,13 +314,19 @@
             <div style="font-size:0.75rem; opacity:0.8; margin-top:5px; letter-spacing:1px;">FINANCIAL REPORT</div>
         </div>
         <div class="share-body" id="cardBody"></div>
+        <div class="share-footer">
+            <img id="cardAgentImg" class="share-avatar" src="image_24505e.png">
+            <div style="text-align: left; margin-left: 10px;">
+                <div id="cardAgentName" style="font-weight:800; font-size:0.9rem;"></div>
+                <div id="cardAgentPhone" style="font-size:0.8rem; color:#8E8E93;"></div>
+            </div>
+        </div>
         <div style="font-size:0.6rem; color:#CCC; text-align:center; padding:15px; background:#F9F9FB;">
-            【本不動產分析報告由雲端系統授權產出】<br>
-            <span id="pdfAgentInfo" style="color:#8E8E93; font-size:0.7rem; margin-top:5px; display:block;"></span>
+            【本不動產分析報告由雲端系統授權產出】
         </div>
     </div>
     <button onclick="downloadPDF()" class="btn-main" style="background:#34C759; margin-top:20px; width:300px; box-shadow: 0 4px 15px rgba(52,199,89,0.3);">📥 下載精美 PDF 報表</button>
-    <button onclick="document.getElementById('shareCardModal').style.display='none'" class="modal-close-btn" style="background:none; color:white; border:1px solid white; margin-top:15px; width:300px;">關閉</button>
+    <button onclick="document.getElementById('shareCardModal').style.display='none'" class="modal-close-btn" style="background:none; color:white; border:1px solid white; margin-top:15px; width:300px; padding:15px; border-radius:15px;">關閉</button>
 </div>
 
 <script>
@@ -329,7 +343,7 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
     
-    // 📧 EmailJS 對接 (已填入你的公鑰)
+    // 📧 EmailJS 對接
     emailjs.init("XjlW9uZ2tXu5dAGJd"); 
 
     let myPhone = null, myData = null, sellRes = null, buyRes = null, currentBuyMode = 'budget', checks = { isSelf: false, isRefund: false }, entranceCounter = 0;
@@ -391,6 +405,10 @@
         if(id === 'isRefund') document.getElementById('boxRefund').style.display = checks[id] ? 'block' : 'none';
     }
 
+    function toggleArea(el) {
+        el.classList.toggle('active');
+    }
+
     // --- 💰 售屋核心邏輯 ---
     function doSell() {
         const bP = parseFloat(document.getElementById('sell_buyP').value)||0;
@@ -400,15 +418,14 @@
         
         if(!bP || !sP || !bD) { alert("⚠️ 請填寫買賣價格與日期"); return; }
         
-        let fee = sP * 0.04; // 4% 服務費寫死
+        let fee = sP * 0.04; // 4% 服務費
         let misc = sP * 0.01; // 1% 規費
         let profit = sP - bP - misc - fee;
         let tax = 0;
         
-        // 房地合一稅簡易判定 (2016後)
         if (new Date(bD) >= new Date('2016-01-01')) {
             let taxable = checks.isSelf ? Math.max(0, profit - 400) : Math.max(0, profit);
-            tax = taxable * (checks.isSelf ? 0.1 : 0.45); // 自住10%，否則抓最高45%
+            tax = taxable * (checks.isSelf ? 0.1 : 0.45); 
         }
         
         let refund = 0;
@@ -423,10 +440,10 @@
         
         document.getElementById('areaS').style.display = 'block';
         document.getElementById('outC').innerText = sellRes.cash + " 萬";
-        document.getElementById('resExplainSell').innerText = `數據明細：\n1. 扣除 4% 服務費：${sellRes.fee} 萬\n2. 扣除規費與稅金：${sellRes.misc + sellRes.tax} 萬\n3. 重購退稅補回：${sellRes.refund} 萬\n最終實際拿回：${sellRes.cash} 萬。`;
+        document.getElementById('resExplainSell').innerText = `【實拿現金拆解】\n1. 扣除 4% 服務費：${sellRes.fee} 萬\n2. 扣除規費與稅金：${sellRes.misc + sellRes.tax} 萬\n3. 重購退稅補回：${sellRes.refund} 萬\n最終實際拿回：${sellRes.cash} 萬。`;
     }
 
-    // --- 🏠 購屋核心邏輯 ---
+    // --- 🏠 購屋核心邏輯 (精準代書與稅費拆解) ---
     function doBuy() {
         const rate = parseFloat(document.getElementById('buy_rate').value)/100;
         const ltv = parseFloat(document.getElementById('buy_ltv').value);
@@ -434,37 +451,64 @@
         const rM = rate/12;
         const pM = (30 - grace) * 12;
         const fact = (Math.pow(1+rM, pM)*rM)/(Math.pow(1+rM, pM)-1);
-        const miscRate = 0.05; // 3%契稅規費 + 2%服務費
         
         let fP = 0, rC = 0, fL = 0, cashLeft = 0;
-        
+        let downPay = 0, serviceFee = 0, deedTaxEst = 0, mortgageFees = 0;
+
         if (currentBuyMode === 'budget') {
             const cash = parseFloat(document.getElementById('buy_cash').value)||0;
             const monthly = parseFloat(document.getElementById('buy_monthly').value)*10000||0;
             if(!cash || !monthly) { alert("⚠️ 請輸入現金與月付預算"); return; }
             
-            fP = Math.min(cash / (1 - ltv + miscRate), monthly / fact / ltv / 10000);
-            fL = fP * ltv; 
-            rC = (fP * (1 - ltv)) + (fP * miscRate); 
+            // 計算最大房屋總價
+            const fP_monthly = (monthly / fact / 10000) / ltv;
+            const fP_cash = (cash - 2.3) / (1 - ltv + 0.03 + ltv * 0.0012);
+            
+            fP = Math.min(fP_monthly, fP_cash);
+            if(fP < 0) fP = 0;
+            
+            fL = fP * ltv;
+            downPay = fP * (1 - ltv);
+            serviceFee = fP * 0.02; // 2% 仲介費
+            deedTaxEst = fP * 0.01; // 1% 契稅預估
+            mortgageFees = 2.3 + (fL * 0.0012); // 代書、保險、銀行開辦、設定規費
+            
+            rC = downPay + serviceFee + deedTaxEst + mortgageFees;
             cashLeft = cash - rC;
             
             document.getElementById('resBuyLabel').innerText = "建議購屋總價";
             document.getElementById('resBuyVal').innerText = Math.round(fP) + " 萬";
-            document.getElementById('resExplainBuy').innerText = `建議：最高能買 ${Math.round(fP)} 萬房產。需準備 ${Math.round(rC)} 萬現金(含頭期與稅費)，您還有 ${Math.round(cashLeft)} 萬閒置資金可供裝潢。`;
         } else {
             fP = parseFloat(document.getElementById('buy_target').value)||0; 
             if(!fP) { alert("⚠️ 請輸入目標總價"); return; }
             
             fL = fP * ltv; 
-            rC = (fP * (1 - ltv)) + (fP * miscRate);
+            downPay = fP * (1 - ltv);
+            serviceFee = fP * 0.02;
+            deedTaxEst = fP * 0.01;
+            mortgageFees = 2.3 + (fL * 0.0012);
+            rC = downPay + serviceFee + deedTaxEst + mortgageFees;
             
             document.getElementById('resBuyLabel').innerText = "預估需備現金";
             document.getElementById('resBuyVal').innerText = Math.round(rC) + " 萬";
-            document.getElementById('resExplainBuy').innerText = `解析：總價 ${fP} 萬房屋，頭期約 ${Math.round(fP*(1-ltv))} 萬，契稅規費及服務費約 ${Math.round(fP*miscRate)} 萬，共需準備 ${Math.round(rC)} 萬現金。`;
         }
         
-        buyRes = { fP:Math.round(fP), fL:Math.round(fL), nPay:Math.round(fL*10000*fact), ltv:ltv*10, grace, rC:Math.round(rC), mode:currentBuyMode, area:document.getElementById('buy_area').value, rate: (rate*100) };
+        const areas = Array.from(document.querySelectorAll('.area-tag.active')).map(t => t.innerText);
+        buyRes = { fP:Math.round(fP), fL:Math.round(fL), nPay:Math.round(fL*10000*fact), ltv:ltv*10, grace, rC:Math.round(rC), mode:currentBuyMode, area:areas.join(', '), rate: (rate*100) };
+        
         document.getElementById('areaB').style.display = 'block';
+        
+        // 詳盡白話文解釋
+        let exp = `【購屋成本拆解 (總價 ${Math.round(fP)} 萬)】\n`;
+        exp += `1. 房屋頭期款 (${ltv*10}成)：約 ${Math.round(downPay*10)/10} 萬\n`;
+        exp += `2. 仲介服務費 (2%)：約 ${Math.round(serviceFee*10)/10} 萬\n`;
+        exp += `3. 契稅等移轉雜支：約 ${Math.round(deedTaxEst*10)/10} 萬\n`;
+        exp += `4. 辦理房貸費用：約 ${Math.round(mortgageFees*10)/10} 萬\n`;
+        exp += `   (含代書約6千、開辦費、火地險及千分之1.2設定規費)\n`;
+        if (currentBuyMode === 'budget') {
+            exp += `\n💡 扣除上述後，您的閒置現金剩餘：${Math.round(cashLeft*10)/10} 萬 (可作裝潢家電預備金)`;
+        }
+        document.getElementById('resExplainBuy').innerText = exp;
     }
 
     // --- ⚖️ PK 核心邏輯 ---
@@ -475,7 +519,7 @@
         
         document.getElementById('areaPK').style.display = 'block';
         document.getElementById('resRentTotal').innerText = Math.round(r * 120 / 10000) + " 萬";
-        document.getElementById('resBuyGain').innerText = Math.round(p * 0.34) + " 萬"; // 假設10年增值 34%
+        document.getElementById('resBuyGain').innerText = Math.round(p * 0.34) + " 萬"; 
     }
 
     // --- 📂 雲端同步與 EmailJS 發送 ---
@@ -488,7 +532,7 @@
         if(!res) { alert("請先點擊計算按鈕"); return; }
         
         const timestamp = Date.now();
-        const area = type==='buy' ? document.getElementById('buy_area').value : 'N/A';
+        const area = type==='buy' ? buyRes.area : 'N/A';
         const packet = { name, phone, type, data: res, area, date: new Date().toLocaleDateString(), agentName: myData.name, agentEmail: myData.email, agentPhone: myPhone };
         
         // 存入自己的資料夾
@@ -496,10 +540,11 @@
         // 同步至 Simba 戰情室
         db.ref(`admin/leads/${myPhone}_${timestamp}`).set(packet);
 
-        // 📧 EmailJS 發信邏輯 (僅 VIP/VVIP 且有設定 Email)
+        // 📧 EmailJS 發信邏輯
         if(myData.tier !== '普通用戶' && myData.email) {
             emailjs.send("service_n8xoxi3", "template_7byd3lk", { 
                 to_email: myData.email, 
+                admin_copy: "houseapptaichung@gmail.com",
                 client_name: name, 
                 summary: `${type==='sell'?'售屋實拿':'購屋總價'} ${res.cash||res.fP}萬`, 
                 agent_name: myData.name,
@@ -553,8 +598,16 @@
                 setBuyMode('target'); 
                 document.getElementById('buy_target').value = c.data.fP; 
             }
-            document.getElementById('buy_area').value = c.area || '北屯區';
             document.getElementById('buy_ltv').value = c.data.ltv / 10;
+            
+            // 恢復多選標籤的狀態
+            document.querySelectorAll('.area-tag').forEach(t => t.classList.remove('active'));
+            if(c.area) {
+                const loadedAreas = c.area.split(', ');
+                document.querySelectorAll('.area-tag').forEach(t => {
+                    if(loadedAreas.includes(t.innerText)) t.classList.add('active');
+                });
+            }
             doBuy();
         }
         alert(`📂 已載入 ${c.name} 的完整財務數據`);
@@ -681,7 +734,9 @@
         
         const cName = document.getElementById(type+'_cName').value || "客戶";
         document.getElementById('cardClientTitle').innerText = `${cName} 專屬分析報告`;
-        document.getElementById('pdfAgentInfo').innerText = `專屬顧問：${myData.name} | 聯絡專線：${myPhone}`;
+        document.getElementById('cardAgentName').innerText = myData.name;
+        document.getElementById('cardAgentPhone').innerText = myPhone;
+        document.getElementById('cardAgentImg').src = document.getElementById('profilePreview').src;
         
         const body = document.getElementById('cardBody');
         const res = type === 'sell' ? sellRes : buyRes;
@@ -720,6 +775,7 @@
         document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active')); 
         el.classList.add('active'); 
     }
+    
     function setBuyMode(m) { 
         currentBuyMode=m; 
         document.getElementById('btnModeB').classList.toggle('active', m==='budget'); 
@@ -727,10 +783,25 @@
         document.getElementById('groupBudget').style.display=(m==='budget'?'block':'none'); 
         document.getElementById('groupTarget').style.display=(m==='target'?'block':'none'); 
     }
+    
+    function handleProfileUpload(i) { 
+        if (i.files && i.files[0]) { 
+            const r = new FileReader(); 
+            r.onload = (e) => document.getElementById('profilePreview').src = e.target.result; 
+            r.readAsDataURL(i.files[0]); 
+        } 
+    }
+
     function saveProfile() { 
-        db.ref('users/'+myPhone).update({ name: document.getElementById('agentName').value, email: document.getElementById('agentEmail').value, phone: document.getElementById('agentPhone').value }); 
+        db.ref('users/'+myPhone).update({ 
+            name: document.getElementById('agentName').value, 
+            email: document.getElementById('agentEmail').value, 
+            phone: document.getElementById('agentPhone').value,
+            photo: document.getElementById('profilePreview').src
+        }); 
         alert("✅ 形象設定已同步至雲端。"); 
     }
+    
     function loadProfile() { 
         if(!myPhone) return; 
         db.ref('users/'+myPhone).once('value', (s) => { 
@@ -739,9 +810,11 @@
                 document.getElementById('agentName').value=d.name||""; 
                 document.getElementById('agentEmail').value=d.email||""; 
                 document.getElementById('agentPhone').value=d.phone||""; 
+                if(d.photo) document.getElementById('profilePreview').src=d.photo;
             } 
         }); 
     }
+    
     function handleMarqueeClick() { if(window.marqueeLink) window.open(window.marqueeLink); }
 </script>
 </body>
