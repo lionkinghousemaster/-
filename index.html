@@ -25,26 +25,27 @@
         }
 
         * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg-body); margin: 0; padding-top: 55px; color: var(--text-main); padding-bottom: calc(var(--nav-height) + 40px); user-select: none; overflow-x: hidden; }
+        body { background: var(--bg-body); margin: 0; padding-top: 80px; color: var(--text-main); padding-bottom: calc(var(--nav-height) + 40px); user-select: none; overflow-x: hidden; }
         
-        .marquee-container { position: fixed; top: 0; left: 0; width: 100%; height: 55px; background: rgba(255, 255, 255, 0.95); border-bottom: 2.5px solid var(--primary); z-index: 1000; overflow: hidden; display: flex; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .marquee-text { white-space: nowrap; animation: marquee 10s linear infinite; color: var(--primary); font-weight: 900; font-size: 1.25rem; cursor: pointer; text-shadow: 0 0 5px rgba(0,122,255,0.3); }
-        @keyframes marquee { 0% { transform: translateX(100vw); } 75% { transform: translateX(-250vw); } 100% { transform: translateX(-250vw); } }
+        /* --- 📢 跑馬燈：修正 3 秒間隔邏輯 --- */
+        .marquee-container { position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: rgba(255, 255, 255, 0.95); border-bottom: 2.5px solid var(--primary); z-index: 1000; overflow: hidden; display: flex; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .marquee-text { display: inline-block; white-space: nowrap; padding-left: 100vw; animation: marquee 15s linear infinite; color: var(--primary); font-weight: 900; font-size: 1.25rem; cursor: pointer; text-shadow: 0 0 5px rgba(0,122,255,0.3); }
+        @keyframes marquee { 0% { transform: translateX(0); } 80% { transform: translateX(-100%); } 100% { transform: translateX(-100%); } }
 
         #splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--primary-gradient); z-index: 11000; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: 0.6s opacity; pointer-events: none; }
         #splash-screen.hidden { opacity: 0; visibility: hidden; }
         #lock-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #FFF; z-index: 10000; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 30px; }
         .lock-content { background: white; padding: 25px; text-align: center; width: 100%; max-width: 360px; }
         .lock-title { font-size: 1.6rem; font-weight: 900; color: var(--primary); margin-bottom: 10px; letter-spacing: -1px; }
-        .lock-input { width: 100%; padding: 18px; font-size: 1.3rem; text-align: center; border: 2.5px solid #F2F2F7; border-radius: 20px; margin-bottom: 20px; font-weight: 800; color: var(--primary); outline: none; }
+        .lock-input { width: 100%; padding: 18px; font-size: 1.3rem; text-align: center; border: 2.5px solid #F2F2F7; border-radius: 20px; margin-bottom: 20px; font-weight: 800; color: var(--primary); outline: none; -webkit-user-select: text !important; user-select: text !important; }
         .lock-btn { background: var(--primary); color: white; width: 100%; padding: 18px; border: none; border-radius: 20px; font-size: 1.1rem; font-weight: 800; cursor: pointer; box-shadow: 0 8px 25px rgba(0,122,255,0.3); }
 
-        header { background: var(--primary-gradient); color: white; height: 60px; display: flex; align-items: center; justify-content: center; position: sticky; top: 55px; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        header { background: var(--primary-gradient); color: white; height: 60px; display: flex; align-items: center; justify-content: center; position: sticky; top: 60px; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         .tier-badge { background: rgba(255,255,255,0.2); font-size: 0.65rem; padding: 2px 8px; border-radius: 6px; margin-left: 8px; border: 1px solid white; }
 
         .container { width: 100%; padding: 20px 15px; margin: 0 auto; max-width: 650px; }
         .card { background: white; border-radius: var(--radius-l); padding: 25px; box-shadow: 0 4px 25px rgba(0,0,0,0.04); margin-bottom: 25px; position: relative; }
-        h2 { font-size: 1.15rem; margin: 0 0 20px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+        h2 { font-size: 1.15rem; margin: 0 0 20px; font-weight: 800; display: flex; align-items: center; gap: 8px; cursor: pointer; }
         h2::before { content: ''; width: 4px; height: 18px; background: var(--primary); border-radius: 2px; }
 
         .area-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px; }
@@ -96,9 +97,9 @@
         .admin-tab { flex: 1; text-align: center; padding: 10px; font-size: 0.85rem; font-weight: 700; color: #8E8E93; border-radius: 8px; cursor: pointer; }
         .admin-tab.active { background: white; color: var(--primary); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .user-list-item { background: #F9F9FB; padding: 15px; border-radius: 15px; margin-bottom: 12px; border: 1px solid #EEE; position: relative; }
-        .admin-delete-btn { background: var(--danger); color: white; border: none; padding: 6px 12px; border-radius: 8px; font-size: 0.75rem; cursor: pointer; }
-        .admin-unbind-btn { background: #FF9500; color: white; border: none; padding: 6px 12px; border-radius: 8px; font-size: 0.75rem; cursor: pointer; margin-left: 5px; }
+        .admin-delete-btn { background: var(--danger); color: white; border: none; padding: 6px 12px; border-radius: 8px; font-size: 0.75rem; position: absolute; top: 15px; right: 15px; cursor: pointer; }
         .lead-card { background: #FFF; border: 1px solid #EEE; border-radius: 12px; padding: 18px; margin-bottom: 12px; cursor: pointer; position: relative; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+        .lead-card:hover { border-color: var(--primary); }
         .lead-delete-btn { position: absolute; right: 15px; top: 15px; color: var(--danger); background: #FFF5F5; border: none; border-radius: 6px; padding: 5px 10px; font-size: 0.7rem; font-weight: bold; cursor: pointer; }
     </style>
 </head>
@@ -116,7 +117,7 @@
         <p style="color:#8E8E93; font-size:0.85rem; margin-bottom:20px;">請輸入註冊手機門號驗證</p>
         <input type="tel" id="passcodeInput" class="lock-input" placeholder="09xx-xxx-xxx">
         <button onclick="checkCloudAuth()" class="lock-btn">解除鎖定</button>
-        <div style="font-size:0.8rem; color:#8E8E93; margin-top:25px; line-height:1.6;">尚未註冊商用方案？請洽管理員。</div>
+        <div style="font-size:0.8rem; color:#8E8E93; margin-top:25px; line-height:1.6;">尚未註冊？請洽管理員開通授權。</div>
     </div>
 </div>
 
@@ -127,7 +128,7 @@
         <div class="card">
             <h2>💰 售屋獲利精算</h2>
             <div class="grid">
-                <input type="text" id="sell_cName" placeholder="客戶稱呼 * (必填)">
+                <input type="text" id="sell_cName" placeholder="客戶稱呼 * (必填，例如：張大明)">
                 <input type="tel" id="sell_cPhone" placeholder="客戶手機 * (必填)">
                 <div class="form-group"><label>取得日期</label><input type="date" id="sell_buyDate"></div>
                 <input type="number" id="sell_buyP" placeholder="買入價格 (萬)">
@@ -214,12 +215,12 @@
 
     <div id="tab-pk" class="tab-content">
         <div class="card">
-            <h2>⚖️ 租房 vs 買房 10年對決</h2>
+            <h2>⚖️ 租房 vs 買房 10年資產對決</h2>
             <div class="grid">
                 <input type="number" id="pkPrice" placeholder="目標購屋總價 (萬)">
                 <input type="number" id="pkRent" placeholder="每月租金 (元)">
             </div>
-            <button onclick="doPK()" class="btn-main" style="margin-top:20px; background:#FF9500;">🥊 開始 10 年資產對決</button>
+            <button onclick="doPK()" class="btn-main" style="margin-top:20px; background:#FF9500;">🥊 開始 10 年資產大對決</button>
             <div id="areaPK" style="display:none; margin-top:25px;">
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
                     <div style="background:#FFF5F5; padding:20px 10px; border-radius:20px; text-align:center;">
@@ -246,7 +247,7 @@
 
     <div id="tab-settings" class="tab-content">
         <div class="card">
-            <h2>👤 品牌形象設定</h2>
+            <h2 onclick="trackEntranceClick()" style="cursor:pointer; user-select:none;">👤 個人品牌設定</h2>
             <div class="grid">
                 <div style="text-align:center; margin-bottom:20px;">
                     <div style="width:100px; height:100px; margin:0 auto; overflow:hidden; border-radius:50%; border:3px solid var(--primary); cursor:pointer;" onclick="document.getElementById('profileImgInput').click()">
@@ -254,13 +255,12 @@
                     </div>
                     <input type="file" id="profileImgInput" accept="image/*" style="display:none;" onchange="handleProfileUpload(this)">
                 </div>
-                <input type="text" id="agentName" placeholder="對外真實姓名">
+                <input type="text" id="agentName" placeholder="您的真實姓名">
                 <input type="text" id="agentPhone" placeholder="您的聯絡電話">
-                <input type="email" id="agentEmail" placeholder="Email (接收客戶備份)">
+                <input type="email" id="agentEmail" placeholder="Email (接收自動備份用)">
                 <button onclick="saveProfile()" class="btn-main">💾 儲存形象同步</button>
             </div>
         </div>
-        <div style="height:150px; width:100%; cursor:default;" onclick="trackEntranceClick()"></div>
     </div>
 </div>
 
@@ -296,7 +296,7 @@
     </div>
     
     <div id="admSection3" style="display:none;">
-        <button onclick="exportLeads()" class="btn-outline" style="width:100%; margin-bottom:15px; background:#34C759; color:white; border:none;">📊 匯出 Excel 名單</button>
+        <button onclick="exportLeads()" class="btn-outline" style="width:100%; margin-bottom:15px; background:#34C759; color:white; border:none;">📊 匯出完整 Excel 名單</button>
         <div id="leadsList"></div>
     </div>
     
@@ -326,7 +326,6 @@
 </div>
 
 <script>
-    // --- 1. Firebase & EmailJS 初始化 ---
     const firebaseConfig = {
         apiKey: "AIzaSyDv3-2psunhNzjbTIY38L8jbVf2wmO5WEw",
         authDomain: "simbaapp-62d40.firebaseapp.com",
@@ -338,16 +337,10 @@
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
+    
     emailjs.init("XjlW9uZ2tXu5dAGJd"); 
 
-    let myPhone = null, myData = null, sellRes = null, buyRes = null, currentBuyMode = 'budget', checks = { isSelf: false, isRefund: false }, entranceCounter = 0;
-
-    // 🔥 設備綁定：產生或獲取專屬 Device ID
-    let currentDeviceId = localStorage.getItem('simba_device_id');
-    if (!currentDeviceId) {
-        currentDeviceId = 'DEV-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
-        localStorage.setItem('simba_device_id', currentDeviceId);
-    }
+    let myPhone = null, myData = null, sellRes = null, buyRes = null, currentBuyMode = 'budget', checks = { isSelf: false, isRefund: false }, entranceCounter = 0, entranceTimer = null;
 
     window.addEventListener('load', () => {
         setTimeout(() => { document.getElementById('splash-screen').classList.add('hidden'); }, 1200);
@@ -356,15 +349,8 @@
             db.ref('users/' + myPhone).on('value', (s) => {
                 myData = s.val();
                 if(myData && myData.status === 'active') {
-                    // 設備綁定驗證
-                    if (myData.deviceId && myData.deviceId !== currentDeviceId) {
-                        alert("⚠️ 系統偵測到此帳號已在其他裝置登入，您已被強制登出！");
-                        localStorage.removeItem('simba_phone');
-                        location.reload();
-                        return;
-                    }
                     document.getElementById('lock-screen').style.display = 'none';
-                    document.getElementById('tierBadge').innerText = myData.tier || "普通版";
+                    document.getElementById('tierBadge').innerText = myData.tier || "普通用戶";
                     refreshFolder();
                 } else if (myData && myData.status === 'blocked') {
                     alert("❌ 您的帳號已被管理員封鎖。");
@@ -395,21 +381,12 @@
         db.ref('users/' + phone).once('value', (s) => {
             const d = s.val();
             if (d && d.status === 'active') { 
-                // 檢查是否已被其他設備綁定
-                if (d.deviceId && d.deviceId !== currentDeviceId) {
-                    alert("❌ 登入失敗！此帳號已綁定其他手機。如需更換設備，請洽管理員解除綁定。");
-                    return;
-                }
-                // 初次登入或解綁後登入，寫入當前設備 ID
-                if (!d.deviceId) {
-                    db.ref('users/' + phone).update({ deviceId: currentDeviceId });
-                }
                 localStorage.setItem('simba_phone', phone); 
                 location.reload(); 
             } else if (d && d.status === 'blocked') { 
                 alert("❌ 此門號已被封鎖，無法登入。"); 
             } else { 
-                alert("❌ 此門號尚未開通商用授權，請洽管理員。"); 
+                alert("❌ 此門號尚未授權，請洽管理員。"); 
             }
         });
     }
@@ -424,7 +401,6 @@
         el.classList.toggle('active');
     }
 
-    // --- 💰 售屋核心邏輯 ---
     function doSell() {
         const bP = parseFloat(document.getElementById('sell_buyP').value)||0;
         const sP = parseFloat(document.getElementById('sell_sellP').value)||0;
@@ -450,6 +426,7 @@
         }
         
         let cash = sP - loan - (tax - refund) - misc - fee;
+        
         sellRes = { cash: Math.round(cash), fee: Math.round(fee), tax: Math.round(tax), refund: Math.round(refund), misc: Math.round(misc), profit: Math.round(profit), sP, bP, loan, bD };
         
         document.getElementById('areaS').style.display = 'block';
@@ -457,7 +434,6 @@
         document.getElementById('resExplainSell').innerText = `【實拿現金拆解】\n1. 扣除 4% 服務費：${sellRes.fee} 萬\n2. 扣除規費與稅金：${sellRes.misc + sellRes.tax} 萬\n3. 重購退稅補回：${sellRes.refund} 萬\n最終實際拿回：${sellRes.cash} 萬。`;
     }
 
-    // --- 🏠 購屋核心邏輯 ---
     function doBuy() {
         const rate = parseFloat(document.getElementById('buy_rate').value)/100;
         const ltv = parseFloat(document.getElementById('buy_ltv').value);
@@ -465,6 +441,7 @@
         const rM = rate/12;
         const pM = (30 - grace) * 12;
         const fact = (Math.pow(1+rM, pM)*rM)/(Math.pow(1+rM, pM)-1);
+        const miscRate = 0.05; 
         
         let fP = 0, rC = 0, fL = 0, cashLeft = 0;
         let downPay = 0, serviceFee = 0, deedTaxEst = 0, mortgageFees = 0;
@@ -523,7 +500,6 @@
         document.getElementById('resExplainBuy').innerText = exp;
     }
 
-    // --- ⚖️ PK 核心邏輯 ---
     function doPK() {
         const p = parseFloat(document.getElementById('pkPrice').value)||0;
         const r = parseFloat(document.getElementById('pkRent').value)||0;
@@ -534,7 +510,6 @@
         document.getElementById('resBuyGain').innerText = Math.round(p * 0.34) + " 萬"; 
     }
 
-    // --- 📂 雲端同步與 EmailJS 發送 ---
     async function saveAndSync(type) {
         const name = document.getElementById(type+'_cName').value.trim();
         const phone = document.getElementById(type+'_cPhone').value.trim();
@@ -550,7 +525,7 @@
         db.ref(`users/${myPhone}/customers/${timestamp}`).set(packet);
         db.ref(`admin/leads/${myPhone}_${timestamp}`).set(packet);
 
-        if(myData.tier !== '普通版' && myData.email) {
+        if(myData.tier !== '普通用戶' && myData.email) {
             emailjs.send("service_n8xoxi3", "template_7byd3lk", { 
                 to_email: myData.email, 
                 admin_copy: "houseapptaichung@gmail.com",
@@ -580,7 +555,7 @@
                 </div>
             </div>`;
         });
-        const limit = myData.tier === '普通版' ? 5 : '無限';
+        const limit = myData.tier === 'VIP用戶' ? 100 : (myData.tier === 'VVIP用戶' ? '無限' : 5);
         document.getElementById('limitDisplay').innerText = `已存儲數量：${Object.keys(myData.customers).length} / ${limit}`;
     }
 
@@ -607,6 +582,7 @@
                 document.getElementById('buy_target').value = c.data.fP; 
             }
             document.getElementById('buy_ltv').value = c.data.ltv / 10;
+            
             document.querySelectorAll('.area-tag').forEach(t => t.classList.remove('active'));
             if(c.area) {
                 const loadedAreas = c.area.split(', ');
@@ -636,9 +612,10 @@
         html2pdf().set(opt).from(element).save();
     }
 
-    // --- 🔑 管理員戰情室 ---
+    // --- 🔑 管理員戰情室 (防護更新) ---
     function trackEntranceClick() {
         entranceCounter++;
+        clearTimeout(entranceTimer);
         if(entranceCounter >= 3) {
             entranceCounter = 0;
             if(prompt("系統密語：") === 'Simba') { 
@@ -648,8 +625,9 @@
             } else {
                 alert("密語錯誤，權限不足。");
             }
+        } else {
+            entranceTimer = setTimeout(() => entranceCounter=0, 2000);
         }
-        setTimeout(()=>entranceCounter=0, 2500);
     }
 
     function refreshAdminUsers() {
@@ -657,51 +635,36 @@
             const users = s.val(); let h = "";
             Object.keys(users).forEach(p => {
                 const u = users[p];
-                const devStatus = u.deviceId ? `<span style="color:#34C759; font-size:0.7rem;">(已綁定手機)</span>` : `<span style="color:#8E8E93; font-size:0.7rem;">(未綁定)</span>`;
-                
                 h += `
                 <div class="user-list-item">
-                    <b>${u.name}</b> (${p}) ${devStatus}<br>
-                    <div style="margin-top:8px;">
-                        <select onchange="updateUserTier('${p}', this.value)" style="padding:5px; border-radius:6px;">
-                            <option value="普通版" ${u.tier==='普通版'?'selected':''}>普通版 (499/月)</option>
-                            <option value="店長版" ${u.tier==='店長版'?'selected':''}>店長版 (25000/年)</option>
-                            <option value="blocked" ${u.status==='blocked'?'selected':''}>🚫 封鎖此帳號</option>
-                        </select>
-                        <div style="margin-top:10px;">
-                            <button class="admin-delete-btn" style="position:static; margin-right:5px;" onclick="adminDeleteUser('${p}')">抹除帳號</button>
-                            <button class="admin-unbind-btn" style="background:#FF9500; color:white; border:none; padding:6px 12px; border-radius:8px; font-size:0.75rem; cursor:pointer;" onclick="adminUnbindDevice('${p}')">解除設備綁定</button>
-                        </div>
-                    </div>
+                    <b>${u.name}</b> (${p})<br>
+                    權限：<select onchange="updateUserTier('${p}', this.value)" style="padding:5px; border-radius:6px; margin-top:5px;">
+                        <option value="普通用戶" ${u.tier==='普通用戶'?'selected':''}>普通用戶</option>
+                        <option value="VIP用戶" ${u.tier==='VIP用戶'?'selected':''}>VIP用戶</option>
+                        <option value="VVIP用戶" ${u.tier==='VVIP用戶'?'selected':''}>VVIP用戶</option>
+                        <option value="blocked" ${u.status==='blocked'?'selected':''}>🚫 封鎖帳號</option>
+                    </select>
+                    <button class="admin-delete-btn" onclick="adminDeleteUser('${p}')">徹底刪除</button>
                 </div>`;
             });
             document.getElementById('userTable').innerHTML = h;
         });
     }
 
-    function adminUnbindDevice(p) {
-        if(confirm(`確定要解除 ${p} 的設備綁定嗎？解綁後該帳號可使用新手機登入。`)) {
-            db.ref('users/' + p).update({ deviceId: null }).then(()=> {
-                alert("✅ 設備已成功解綁。");
-                refreshAdminUsers();
-            });
-        }
-    }
-
     function adminDeleteUser(p) { if(confirm(`確定徹底刪除帳號 ${p}？資料將全部遺失。`)) db.ref('users/' + p).remove().then(()=>refreshAdminUsers()); }
-    function adminDeleteLead(e, k) { e.stopPropagation(); if(confirm('要從雷達中刪除這筆資料嗎？')) db.ref('admin/leads/' + k).remove(); }
+    function adminDeleteLead(e, k) { e.stopPropagation(); if(confirm('要從雷達中刪除這筆測試資料嗎？')) db.ref('admin/leads/' + k).remove(); }
     
     function updateUserTier(p, t) { 
         db.ref('users/' + p).update({ tier: t, status: (t==='blocked'?'blocked':'active') }); 
-        alert("✅ 方案已更新 (若為封鎖，對方將即刻強制登出)");
+        alert("✅ 權限已同步更新 (若為封鎖，對方將即刻強制登出)");
     }
     
     function createNewUser() { 
         const p = document.getElementById('adm_phone').value.trim();
         const n = document.getElementById('adm_name').value.trim(); 
         if(!p || !n) { alert("請輸入手機與姓名"); return; }
-        db.ref('users/'+p).set({ name: n, status: 'active', tier: '普通版' }).then(()=>refreshAdminUsers()); 
-        alert("✅ 開通成功，預設為普通版"); 
+        db.ref('users/'+p).set({ name: n, status: 'active', tier: '普通用戶' }).then(()=>refreshAdminUsers()); 
+        alert("✅ 開通成功"); 
     }
 
     function publishMarquee() { 
@@ -748,9 +711,8 @@
         });
     }
 
-    // --- UI 互動與分享 ---
     function showShareCard(type) {
-        if(myData.tier === '普通用戶' || myData.tier === '普通版') { alert("❌ 抱歉，普通版不支援生成專業報表，請洽管理員升級。"); return; }
+        if(myData.tier === '普通用戶') { alert("❌ 抱歉，普通版不支援生成專業報表，請洽管理員升級。"); return; }
         
         const cName = document.getElementById(type+'_cName').value || "客戶";
         document.getElementById('cardClientTitle').innerText = `${cName} 專屬分析報告`;
@@ -793,6 +755,7 @@
         document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active')); 
         el.classList.add('active'); 
     }
+    
     function setBuyMode(m) { 
         currentBuyMode=m; 
         document.getElementById('btnModeB').classList.toggle('active', m==='budget'); 
@@ -800,6 +763,7 @@
         document.getElementById('groupBudget').style.display=(m==='budget'?'block':'none'); 
         document.getElementById('groupTarget').style.display=(m==='target'?'block':'none'); 
     }
+    
     function handleProfileUpload(i) { 
         if (i.files && i.files[0]) { 
             const r = new FileReader(); 
@@ -807,10 +771,17 @@
             r.readAsDataURL(i.files[0]); 
         } 
     }
+
     function saveProfile() { 
-        db.ref('users/'+myPhone).update({ name: document.getElementById('agentName').value, email: document.getElementById('agentEmail').value, phone: document.getElementById('agentPhone').value, photo: document.getElementById('profilePreview').src }); 
+        db.ref('users/'+myPhone).update({ 
+            name: document.getElementById('agentName').value, 
+            email: document.getElementById('agentEmail').value, 
+            phone: document.getElementById('agentPhone').value,
+            photo: document.getElementById('profilePreview').src
+        }); 
         alert("✅ 形象設定已同步至雲端。"); 
     }
+    
     function loadProfile() { 
         if(!myPhone) return; 
         db.ref('users/'+myPhone).once('value', (s) => { 
@@ -823,6 +794,7 @@
             } 
         }); 
     }
+    
     function handleMarqueeClick() { if(window.marqueeLink) window.open(window.marqueeLink); }
 </script>
 </body>
