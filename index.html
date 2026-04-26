@@ -10,35 +10,40 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
     <style>
-        :root { --primary: #007AFF; --bg: #F2F2F7; --radius: 24px; }
+        :root { --primary: #007AFF; --primary-gradient: linear-gradient(135deg, #007AFF, #5856D6); --bg: #F2F2F7; --radius: 24px; }
         * { box-sizing: border-box; font-family: -apple-system, sans-serif; }
-        body { background: var(--bg); margin: 0; padding-top: 100px; padding-bottom: 100px; user-select: none; }
-        .marquee-container { position: fixed; top: 0; left: 0; width: 100%; height: 90px; background: #FFF; border-bottom: 4px solid var(--primary); z-index: 1000; overflow: hidden; display: flex; align-items: center; }
-        .marquee-text { white-space: nowrap; animation: marquee 30s linear infinite; color: var(--primary); font-weight: 900; font-size: 2.5rem; padding-left: 100vw; }
-        @keyframes marquee { 0% { transform: translateX(0); } 85% { transform: translateX(-400vw); } 100% { transform: translateX(-400vw); } }
+        body { background: var(--bg); margin: 0; padding-top: 100px; padding-bottom: 90px; user-select: none; }
+        /* 跑馬燈：慢速大字 */
+        .marquee-container { position: fixed; top: 0; left: 0; width: 100%; height: 90px; background: #FFF; border-bottom: 3px solid var(--primary); z-index: 1000; overflow: hidden; display: flex; align-items: center; }
+        .marquee-text { white-space: nowrap; animation: marquee 40s linear infinite; color: var(--primary); font-weight: 900; font-size: 2.5rem; padding-left: 100vw; }
+        @keyframes marquee { 0% { transform: translateX(0); } 85% { transform: translateX(-450vw); } 100% { transform: translateX(-450vw); } }
+        /* 登入鎖定 */
         #lock-screen { position: fixed; inset: 0; background: #FFF; z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 30px; }
-        .lock-content { width: 100%; max-width: 360px; text-align: center; }
         .lock-title { font-size: 1.6rem; font-weight: 900; color: var(--primary); cursor: pointer; margin-bottom: 20px; }
         input, select { width: 100%; padding: 16px; border: 2px solid #E5E5EA; border-radius: 15px; font-size: 1rem; margin-bottom: 12px; background: #FAFAFA; outline: none; }
-        .btn-main { background: var(--primary); color: #FFF; width: 100%; padding: 18px; border: none; border-radius: 18px; font-size: 1.1rem; font-weight: 800; cursor: pointer; }
-        .btn-outline { background: #FFF; border: 2px solid var(--primary); color: var(--primary); width: 100%; padding: 15px; border-radius: 18px; font-weight: 800; margin-top: 10px; }
-        header { background: linear-gradient(135deg, #007AFF, #5856D6); color: #FFF; height: 60px; display: flex; align-items: center; justify-content: center; position: sticky; top: 90px; z-index: 100; }
+        .btn-main { background: var(--primary); color: #FFF; width: 100%; padding: 18px; border: none; border-radius: 18px; font-size: 1.1rem; font-weight: 800; cursor: pointer; box-shadow: 0 4px 15px rgba(0,122,255,0.2); }
+        .btn-outline { background: #FFF; border: 2px solid var(--primary); color: var(--primary); width: 100%; padding: 18px; border-radius: 18px; font-weight: 800; margin-top: 10px; cursor: pointer; }
+        header { background: var(--primary-gradient); color: #FFF; height: 60px; display: flex; align-items: center; justify-content: center; position: sticky; top: 90px; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         .container { padding: 20px 15px; max-width: 600px; margin: 0 auto; }
-        .card { background: #FFF; border-radius: var(--radius); padding: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); margin-bottom: 25px; position: relative; }
-        h2 { font-size: 1.1rem; margin: 0 0 20px; display: flex; align-items: center; gap: 8px; cursor: pointer; }
-        h2::before { content: ''; width: 4px; height: 16px; background: var(--primary); border-radius: 2px; }
-        .area-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px; }
-        .area-tag { padding: 8px 12px; background: #F2F2F7; border-radius: 10px; font-size: 0.8rem; font-weight: 600; color: #8E8E93; cursor: pointer; }
-        .area-tag.active { background: var(--primary); color: #FFF; }
+        .card { background: #FFF; border-radius: var(--radius); padding: 25px; box-shadow: 0 4px 25px rgba(0,0,0,0.04); margin-bottom: 25px; }
+        h2 { font-size: 1.1rem; margin: 0 0 20px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+        h2::before { content: ''; width: 4px; height: 18px; background: var(--primary); border-radius: 2px; }
         .mode-toggle { display: flex; background: #F2F2F7; border-radius: 16px; padding: 5px; margin-bottom: 25px; }
-        .toggle-btn { flex: 1; text-align: center; padding: 12px; font-size: 0.9rem; font-weight: 800; color: #8E8E93; border-radius: 12px; cursor: pointer; border: none; background: none; }
+        .toggle-btn { flex: 1; text-align: center; padding: 14px; font-size: 0.95rem; font-weight: 800; color: #8E8E93; border-radius: 12px; cursor: pointer; border: none; background: none; }
         .toggle-btn.active { background: #FFF; color: var(--primary); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .res-area { margin-top: 25px; display: none; }
-        .res-card { background: linear-gradient(135deg, #007AFF, #5856D6); border-radius: 20px; padding: 25px; color: #FFF; text-align: center; }
-        .res-val { font-size: 2.5rem; font-weight: 900; }
+        .area-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px; }
+        .area-tag { padding: 8px 12px; background: #F2F2F7; border-radius: 10px; font-size: 0.8rem; font-weight: 600; cursor: pointer; }
+        .area-tag.active { background: var(--primary); color: #FFF; }
+        .check-item { display: flex; align-items: center; padding: 15px; background: #F9F9FB; border-radius: 14px; margin-bottom: 10px; cursor: pointer; border: 1px solid #EEE; }
+        .check-item.active { background: #E5F1FF; border-color: var(--primary); }
+        .check-box { width: 22px; height: 22px; border: 2px solid #CCC; border-radius: 6px; margin-right: 12px; background: #FFF; }
+        .check-item.active .check-box { background: var(--primary); border-color: var(--primary); }
+        .res-area { margin-top: 30px; display: none; }
+        .res-card { background: var(--primary-gradient); border-radius: 24px; padding: 30px 20px; color: #FFF; text-align: center; }
+        .res-val { font-size: 2.6rem; font-weight: 900; }
         .res-explain { background: #E5F1FF; color: #0056B3; padding: 18px; border-radius: 15px; margin-top: 15px; font-size: 0.85rem; line-height: 1.6; white-space: pre-line; font-weight: 600; }
         .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 75px; background: rgba(255,255,255,0.95); display: flex; justify-content: space-around; align-items: center; z-index: 999; border-top: 1px solid #EEE; }
-        .nav-item { flex: 1; text-align: center; color: #8E8E93; font-size: 0.75rem; font-weight: 700; cursor: pointer; }
+        .nav-item { flex: 1; text-align: center; color: #8E8E93; font-size: 0.8rem; font-weight: 700; cursor: pointer; }
         .nav-item.active { color: var(--primary); }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
@@ -46,22 +51,22 @@
         .admin-tab-group { display: flex; background: #F2F2F7; padding: 5px; border-radius: 12px; margin-bottom: 20px; }
         .admin-tab { flex: 1; text-align: center; padding: 10px; font-size: 0.8rem; border-radius: 8px; cursor: pointer; }
         .admin-tab.active { background: #FFF; color: var(--primary); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .user-list-item { background: #F9F9FB; padding: 15px; border-radius: 15px; margin-bottom: 12px; border: 1px solid #EEE; position: relative; }
+        .user-list-item { background: #F9F9FB; padding: 15px; border-radius: 15px; margin-bottom: 12px; border: 1px solid #EEE; }
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 20000; flex-direction: column; align-items: center; padding: 40px 15px; }
-        .share-card { width: 100%; max-width: 380px; background: #FFF; border-radius: 30px; overflow: hidden; }
-        .share-header { background: linear-gradient(135deg, #007AFF, #5856D6); padding: 30px 20px; color: #FFF; text-align: center; }
-        .share-body { padding: 25px; color: #1D1D1F; }
-        .share-footer { background: #F9F9FB; padding: 20px; display: flex; align-items: center; gap: 12px; border-top: 1px solid #EEE; }
-        .share-avatar { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary); }
+        .share-card { width: 100%; max-width: 400px; background: #FFF; border-radius: 30px; overflow: hidden; }
+        .share-header { background: var(--primary-gradient); padding: 30px 20px; color: #FFF; text-align: center; }
+        .share-body { padding: 30px; color: #1D1D1F; }
+        .share-footer { background: #F9F9FB; padding: 25px; display: flex; align-items: center; gap: 15px; border-top: 1px solid #EEE; }
+        .share-avatar { width: 55px; height: 55px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover; }
     </style>
 </head>
 <body>
 
-<div id="splash-screen"><img src="image_24505e.png" style="width:80px;"><div style="color:#FFF; font-weight:900; margin-top:15px;">房產精算師 PREMIUM</div></div>
+<div id="splash-screen"><img src="image_24505e.png" style="width:100px;"><div style="color:#FFF; font-weight:900; margin-top:15px;">房產精算師 PREMIUM</div></div>
 
-<div class="marquee-container" id="marqueeArea" style="display:none;"><div class="marquee-text" id="marqueeText" onclick="handleMarqueeClick()">正在同步最新案源資訊...</div></div>
+<div class="marquee-container" id="marqueeArea" style="display:none;"><div class="marquee-text" id="marqueeText" onclick="handleMarqueeClick()">正在加載案源與數據更新...</div></div>
 
-<div id="lock-screen"><div class="lock-content"><div class="lock-title" onclick="adminUnlock()">房產財務精算師</div><input type="tel" id="passcodeInput" placeholder="輸入手機號碼"><button onclick="checkCloudAuth()" class="lock-btn">解除鎖定</button></div></div>
+<div id="lock-screen"><div class="lock-content"><div class="lock-title" onclick="adminUnlock()">房產財務精算師</div><input type="tel" id="passcodeInput" class="lock-input" placeholder="09xx-xxx-xxx"><button onclick="checkCloudAuth()" class="lock-btn">解除鎖定</button></div></div>
 
 <header><h1>房產財務精算師 <span id="tierBadge" class="tier-badge"></span></h1></header>
 
@@ -71,13 +76,17 @@
             <h2>💰 售屋獲利精算</h2>
             <input type="text" id="sell_cName" placeholder="客戶稱呼 *"><input type="tel" id="sell_cPhone" placeholder="客戶手機 *">
             <div class="form-group"><label>取得日期</label><input type="date" id="sell_buyDate"></div>
-            <input type="number" id="sell_buyP" placeholder="買入總價 (萬)"><input type="number" id="sell_sellP" placeholder="預計賣價 (萬)"><input type="number" id="sell_loanL" placeholder="房貸餘額 (萬)">
-            <div class="check-item" id="item_isSelf" onclick="toggleCheck('isSelf')"><div class="check-box"></div>符合自住 6 年免稅 (400萬)</div>
-            <div class="check-item" id="item_isRefund" onclick="toggleCheck('isRefund')"><div class="check-box"></div>使用重購退稅</div>
-            <div id="boxRefund" style="display:none;"><input type="number" id="sell_newP" placeholder="新購總價 (萬)"></div>
-            <button onclick="doSell()" class="btn-main">📊 開始計算</button>
-            <button onclick="saveAndSync('sell')" class="btn-outline">📂 儲存同步雲端</button>
-            <div id="areaS" class="res-area"><div class="res-card"><div class="res-val" id="outC">0 萬</div></div><div id="resExplainSell" class="res-explain"></div><button onclick="showShareCard('sell')" class="btn-main" style="margin-top:15px;">✨ 生成 PDF 報表</button></div>
+            <input type="number" id="sell_buyP" placeholder="買入價格 (萬)"><input type="number" id="sell_sellP" placeholder="預計賣價 (萬)"><input type="number" id="sell_loanL" placeholder="房貸餘額 (萬)">
+            <div class="check-item" id="item_isSelf" onclick="toggleCheck('isSelf')"><div class="check-box"></div>自住 6 年免稅 (400萬額度)</div>
+            <div class="check-item" id="item_isRefund" onclick="toggleCheck('isRefund')"><div class="check-box"></div>擬使用重購退稅</div>
+            <div id="boxRefund" style="display:none; padding:15px; background:#F2F2F7; border-radius:14px;"><input type="number" id="sell_newP" placeholder="新購總價 (萬)"></div>
+            <button onclick="doSell()" class="btn-main">📊 計算獲利分析</button>
+            <button onclick="saveAndSync('sell')" class="btn-outline">📂 儲存並同步雲端</button>
+            <div id="areaS" class="res-area">
+                <div class="res-card"><div style="font-size:0.9rem; opacity:0.9;">可實際拿回金額</div><div class="res-val" id="outC">0 萬</div></div>
+                <div id="resExplainSell" class="res-explain"></div>
+                <button onclick="showShareCard('sell')" class="btn-main" style="margin-top:20px; background:var(--primary-gradient);">✨ 下載 PDF 專業報表</button>
+            </div>
         </div>
     </div>
 
@@ -86,29 +95,33 @@
             <h2>🏠 購屋能力評估</h2>
             <div class="mode-toggle"><button id="btnModeB" class="toggle-btn active" onclick="setBuyMode('budget')">用預算推</button><button id="btnModeT" class="toggle-btn" onclick="setBuyMode('target')">由總價推</button></div>
             <input type="text" id="buy_cName" placeholder="客戶姓名 *"><input type="tel" id="buy_cPhone" placeholder="客戶手機 *">
-            <div id="groupBudget"><input type="number" id="buy_cash" placeholder="可用現金 (萬)"><input type="number" id="buy_monthly" placeholder="月預算 (萬)"></div>
-            <div id="groupTarget" style="display:none;"><input type="number" id="buy_target" placeholder="目標總價 (萬)"></div>
+            <div id="groupBudget"><input type="number" id="buy_cash" placeholder="可用現金 (萬)"><input type="number" id="buy_monthly" placeholder="月還預算 (萬)"></div>
+            <div id="groupTarget" style="display:none;"><input type="number" id="buy_target" placeholder="房屋目標總價 (萬)"></div>
             <div class="form-group"><label>預計區域 (多選)</label><div class="area-grid">
-                <div class="area-tag" onclick="toggleArea(this)">北屯區</div><div class="area-tag" onclick="toggleArea(this)">西屯區</div><div class="area-tag" onclick="toggleArea(this)">南屯區</div><div class="area-tag" onclick="toggleArea(this)">太平區</div><div class="area-tag" onclick="toggleArea(this)">北區</div><div class="area-tag" onclick="toggleArea(this)">東區</div><div class="area-tag" onclick="toggleArea(this)">南區</div><div class="area-tag" onclick="toggleArea(this)">西區</div><div class="area-tag" onclick="toggleArea(this)">中區</div><div class="area-tag" onclick="toggleArea(this)">大里區</div><div class="area-tag" onclick="toggleArea(this)">其他</div>
+                <div class="area-tag" onclick="toggleArea(this)">北屯區</div><div class="area-tag" onclick="toggleArea(this)">西屯區</div><div class="area-tag" onclick="toggleArea(this)">南屯區</div><div class="area-tag" onclick="toggleArea(this)">太平區</div><div class="area-tag" onclick="toggleArea(this)">大里區</div><div class="area-tag" onclick="toggleArea(this)">北區</div><div class="area-tag" onclick="toggleArea(this)">東區</div><div class="area-tag" onclick="toggleArea(this)">南區</div><div class="area-tag" onclick="toggleArea(this)">西區</div><div class="area-tag" onclick="toggleArea(this)">中區</div><div class="area-tag" onclick="toggleArea(this)">豐原區</div><div class="area-tag" onclick="toggleArea(this)">其他</div>
             </div></div>
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
                 <select id="buy_years"><option value="30">30年期</option><option value="40">40年期</option></select>
                 <select id="buy_grace"><option value="0">無寬限</option><option value="3">3年寬限</option><option value="5">5年寬限</option></select>
             </div>
-            <select id="buy_rate"><option value="2.18">2.18% (地板)</option><option value="2.5" selected>2.5% (一般)</option></select>
-            <select id="buy_ltv"><option value="0.7">7成</option><option value="0.75" selected>7.5成</option><option value="0.8">8成</option></select>
-            <button onclick="doBuy()" class="btn-main">🔍 進行財務評估</button>
+            <select id="buy_rate"><option value="2.18">2.18 % (地板價)</option><option value="2.5" selected>2.5 % (一般)</option></select>
+            <select id="buy_ltv"><option value="0.7">7 成</option><option value="0.75" selected>7.5 成</option><option value="0.8">8 成</option></select>
+            <button onclick="doBuy()" class="btn-main">🔍 進行財務分析</button>
             <button onclick="saveAndSync('buy')" class="btn-outline">📂 儲存同步雲端</button>
-            <div id="areaB" class="res-area"><div class="res-card"><div class="res-val" id="resBuyVal">0 萬</div></div><div id="resExplainBuy" class="res-explain"></div><button onclick="showShareCard('buy')" class="btn-main" style="margin-top:15px;">✨ 生成 PDF 報表</button></div>
+            <div id="areaB" class="res-area">
+                <div class="res-card"><div id="resBuyLabel" class="res-val-label">建議總價</div><div class="res-val" id="resBuyVal">0 萬</div></div>
+                <div id="resExplainBuy" class="res-explain"></div>
+                <button onclick="showShareCard('buy')" class="btn-main" style="margin-top:20px; background:var(--primary-gradient);">✨ 下載 PDF 專業報表</button>
+            </div>
         </div>
     </div>
 
-    <div id="tab-folder" class="tab-content"><div class="card"><h2>📂 客戶存檔清單</h2><div id="folderList"></div></div></div>
+    <div id="tab-folder" class="tab-content"><div class="card"><h2>📂 雲端客戶名單</h2><div id="folderList"></div></div></div>
 
     <div id="tab-settings" class="tab-content">
         <div class="card"><h2 onclick="trackEntranceClick()">👤 品牌形象設定</h2>
-            <div style="text-align:center; margin-bottom:20px;"><div style="width:90px; height:90px; margin:0 auto; overflow:hidden; border-radius:50%; border:3px solid var(--primary); cursor:pointer;" onclick="document.getElementById('profileImgInput').click()"><img id="profilePreview" src="image_24505e.png" style="width:100%; height:100%; object-fit:cover;"></div><input type="file" id="profileImgInput" accept="image/*" style="display:none;" onchange="handleProfileUpload(this)"></div>
-            <input type="text" id="agentName" placeholder="您的姓名"><input type="text" id="agentPhone" placeholder="聯絡電話"><input type="email" id="agentEmail" placeholder="Email"><button onclick="saveProfile()" class="btn-main">💾 儲存形象同步</button><div id="devIdView" style="font-size:0.6rem; color:#CCC; margin-top:15px; text-align:center;"></div>
+            <div style="text-align:center; margin-bottom:20px;"><div style="width:100px; height:100px; margin:0 auto; overflow:hidden; border-radius:50%; border:3px solid var(--primary); cursor:pointer;" onclick="document.getElementById('profileImgInput').click()"><img id="profilePreview" src="image_24505e.png" style="width:100%; height:100%; object-fit:cover;"></div><input type="file" id="profileImgInput" accept="image/*" style="display:none;" onchange="handleProfileUpload(this)"></div>
+            <input type="text" id="agentName" placeholder="對外真實姓名"><input type="text" id="agentPhone" placeholder="聯絡電話"><input type="email" id="agentEmail" placeholder="Email"><button onclick="saveProfile()" class="btn-main">💾 儲存同步</button><div id="devIdView" style="font-size:0.6rem; color:#CCC; margin-top:20px; text-align:center;"></div>
         </div>
     </div>
 </div>
@@ -118,30 +131,30 @@
 <div id="adminPanel">
     <h3 style="color:var(--primary); margin:15px;">🔑 管理戰情室</h3>
     <div class="admin-tab-group"><div class="admin-tab active" onclick="setAdminMode(1)">用戶</div><div class="admin-tab" onclick="setAdminMode(2)">公告</div><div class="admin-tab" onclick="setAdminMode(3)">雷達</div></div>
-    <div id="admSection1" style="padding:15px;"><input type="text" id="adm_phone" placeholder="開通門號"><input type="text" id="adm_name" placeholder="姓名"><button onclick="createNewUser()" class="btn-main" style="margin-bottom:15px;">手動開通</button><div id="userTable"></div></div>
-    <div id="admSection2" style="display:none; padding:15px;"><input type="text" id="adm_msg" placeholder="公告內容"><button onclick="publishMarquee()" class="btn-main">更新公告</button></div>
-    <div id="admSection3" style="display:none; padding:15px;"><button onclick="exportLeads()" class="btn-outline">📊 匯出名單</button><div id="leadsList" style="margin-top:15px;"></div></div>
-    <button onclick="document.getElementById('adminPanel').style.display='none'" class="btn-outline">關閉後台</button>
+    <div id="admSection1" style="padding:15px;"><input type="text" id="adm_phone" placeholder="開通門號"><input type="text" id="adm_name" placeholder="姓名"><button onclick="createNewUser()" class="btn-main">開通帳號</button><div id="userTable" style="margin-top:15px;"></div></div>
+    <div id="admSection2" style="display:none; padding:15px;"><input type="text" id="adm_msg" placeholder="公告文字"><button onclick="publishMarquee()" class="btn-main">更新公告</button></div>
+    <div id="admSection3" style="display:none; padding:15px;"><button onclick="exportLeads()" class="btn-outline">📊 匯出 Excel</button><div id="leadsList" style="margin-top:15px;"></div></div>
+    <button onclick="document.getElementById('adminPanel').style.display='none'" class="btn-outline">關閉戰情室</button>
 </div>
 
-<div id="shareCardModal" class="modal"><div id="pdfContent" class="share-card"><div class="share-header"><div id="cardClientTitle" style="font-weight:900; font-size:1.1rem;"></div></div><div class="share-body" id="cardBody"></div><div class="share-footer"><img id="cardAgentImg" class="share-avatar" src="image_24505e.png"><div style="text-align:left;"><div id="cardAgentName" style="font-weight:800;"></div><div id="cardAgentPhone" style="font-size:0.8rem; color:#8E8E93;"></div></div></div><div style="font-size:0.5rem; color:#CCC; text-align:center; padding:10px 15px;">本報告僅供參考，實際核貸及稅費以主管機關核定為準。</div></div><button onclick="downloadPDF()" class="btn-main" style="background:#34C759; margin-top:20px; width:300px;">📥 下載精美 PDF 報表</button><button onclick="document.getElementById('shareCardModal').style.display='none'" class="btn-outline" style="color:#FFF; border-color:#FFF; width:300px;">關閉</button></div>
+<div id="shareCardModal" class="modal"><div id="pdfContent" class="share-card"><div class="share-header"><div id="cardClientTitle" style="font-weight:900; font-size:1.2rem;"></div></div><div class="share-body" id="cardBody"></div><div class="share-footer"><img id="cardAgentImg" class="share-avatar" src="image_24505e.png"><div style="text-align:left;"><div id="cardAgentName" style="font-weight:800;"></div><div id="cardAgentPhone" style="font-size:0.8rem; color:#8E8E93;"></div></div></div><div style="font-size:0.5rem; color:#CCC; text-align:center; padding:15px; background:#F9F9FB;">本報告由雲端系統授權產出，數據僅供參考。</div></div><button onclick="downloadPDF()" class="btn-main" style="background:#34C759; margin-top:20px; width:300px;">📥 下載精美 PDF 報表</button><button onclick="document.getElementById('shareCardModal').style.display='none'" class="modal-close-btn" style="color:#FFF; margin-top:15px;">關閉</button></div>
 
 <script>
     const firebaseConfig = { apiKey: "AIzaSyDv3-2psunhNzjbTIY38L8jbVf2wmO5WEw", authDomain: "simbaapp-62d40.firebaseapp.com", databaseURL: "https://simbaapp-62d40-default-rtdb.asia-southeast1.firebasedatabase.app", projectId: "simbaapp-62d40", storageBucket: "simbaapp-62d40.firebasestorage.app", messagingSenderId: "579331559085", appId: "1:579331559085:web:4d6e4ab3605f124ae1c024" };
     firebase.initializeApp(firebaseConfig); const db = firebase.database(); emailjs.init("XjlW9uZ2tXu5dAGJd");
     let myPhone = null, myData = null, sellRes = null, buyRes = null, currentBuyMode = 'budget', checks = { isSelf: false, isRefund: false }, entranceCounter = 0;
-    let devId = localStorage.getItem('simba_device_id') || ('DEV-'+Date.now()); localStorage.setItem('simba_device_id', devId);
+    let currentDeviceId = localStorage.getItem('simba_device_id') || ('DEV-'+Date.now()); localStorage.setItem('simba_device_id', currentDeviceId);
 
     window.addEventListener('load', () => {
         setTimeout(() => document.getElementById('splash-screen').classList.add('hidden'), 1200);
-        document.getElementById('devIdView').innerText = "Device ID: " + devId;
+        document.getElementById('devIdView').innerText = "Device ID: " + currentDeviceId;
         myPhone = localStorage.getItem('simba_phone');
         if (myPhone) {
             db.ref('users/' + myPhone).on('value', (s) => {
                 myData = s.val(); if(myData && myData.status === 'active') {
-                    if (myData.deviceId && myData.deviceId !== devId) { alert("⚠️ 此帳號已在其他手機登入！"); localStorage.clear(); location.reload(); return; }
+                    if (myData.deviceId && myData.deviceId !== currentDeviceId) { alert("⚠️ 偵測到異地登入，帳號已鎖定！"); localStorage.clear(); location.reload(); return; }
                     document.getElementById('lock-screen').style.display = 'none'; document.getElementById('tierBadge').innerText = myData.tier || "普通版"; refreshFolder();
-                } else { localStorage.clear(); location.reload(); }
+                } else if (myData && myData.status === 'blocked') { alert("❌ 帳號封鎖中"); localStorage.clear(); location.reload(); }
             });
             db.ref('system/broadcast').on('value', (s) => { const b = s.val(); if(b && b.text) { document.getElementById('marqueeArea').style.display='flex'; document.getElementById('marqueeText').innerText=b.text; } });
         } else { document.getElementById('lock-screen').style.display = 'flex'; }
@@ -152,8 +165,8 @@
         const phone = document.getElementById('passcodeInput').value.trim();
         db.ref('users/' + phone).once('value', (s) => {
             const d = s.val(); if (d && d.status === 'active') {
-                if (d.deviceId && d.deviceId !== devId) { alert("❌ 此號碼已綁定其他手機，請聯繫管理員。"); return; }
-                if (!d.deviceId) db.ref('users/' + phone).update({ deviceId: devId });
+                if (d.deviceId && d.deviceId !== currentDeviceId) { alert("❌ 此號碼已綁定手機，請洽管理員。"); return; }
+                if (!d.deviceId) db.ref('users/' + phone).update({ deviceId: currentDeviceId });
                 localStorage.setItem('simba_phone', phone); location.reload();
             } else { alert("❌ 未開通或被封鎖"); }
         });
@@ -169,42 +182,52 @@
         let cash = sP - loan - (tax - refund) - misc - fee;
         sellRes = { cash: Math.round(cash), fee: Math.round(fee), tax: Math.round(tax), refund: Math.round(refund), misc: Math.round(misc), profit: Math.round(profit), sP, bP, loan, bD, isSelf: checks.isSelf, isRefund: checks.isRefund };
         document.getElementById('areaS').style.display = 'block'; document.getElementById('outC').innerText = sellRes.cash + " 萬";
-        document.getElementById('resExplainSell').innerText = `【獲利細節】仲介費4%：${sellRes.fee}萬 / 房地稅額：${sellRes.tax}萬 / 退稅：${sellRes.refund}萬 / 實拿：${sellRes.cash}萬。`;
+        document.getElementById('resExplainSell').innerText = `【精算】仲介費4%：${sellRes.fee}萬 / 房地稅金：${sellRes.tax}萬 / 退稅：${sellRes.refund}萬 / 實拿：${sellRes.cash}萬。`;
     }
 
     function doBuy() {
         const rate = parseFloat(document.getElementById('buy_rate').value)/100, ltv = parseFloat(document.getElementById('buy_ltv').value);
         const grace = parseInt(document.getElementById('buy_grace').value), years = parseInt(document.getElementById('buy_years').value);
         const fact = (Math.pow(1+rate/12, (years-grace)*12)*rate/12)/(Math.pow(1+rate/12, (years-grace)*12)-1);
-        let fP = 0, rC = 0, fL = 0;
+        let fP = 0, rC = 0, fL = 0, cashLeft = 0;
         if (currentBuyMode === 'budget') {
             const cash = parseFloat(document.getElementById('buy_cash').value)||0, monthly = parseFloat(document.getElementById('buy_monthly').value)*10000||0;
-            fP = Math.min(cash / (1 - ltv + 0.032), monthly / fact / ltv / 10000);
-        } else { fP = parseFloat(document.getElementById('buy_target').value)||0; }
-        fL = fP * ltv; rC = (fP * (1 - ltv)) + (fP * 0.03) + 1.4 + (fL * 0.0012);
-        buyRes = { fP:Math.round(fP), fL:Math.round(fL), nPay:Math.round(fL*10000*fact), gPay:Math.round(fL*10000*(rate/12)), rC:Math.round(rC), mode:currentBuyMode };
-        document.getElementById('areaB').style.display = 'block'; document.getElementById('resBuyVal').innerText = (currentBuyMode==='budget'?buyRes.fP:buyRes.rC) + " 萬";
-        document.getElementById('resExplainBuy').innerText = `【精算】總價：${buyRes.fP}萬 / 月繳：${buyRes.nPay.toLocaleString()}元 / 寬限利息：${buyRes.gPay.toLocaleString()}元 / 自備+稅費：約${buyRes.rC}萬\n(包含代書開辦費約1.4萬+設定規費0.12%)`;
+            const fP_m = (monthly / fact / 10000) / ltv; const fP_c = (cash - 1.4) / (1 - ltv + 0.03 + ltv * 0.0012);
+            fP = Math.min(fP_m, fP_c); if(fP < 0) fP = 0; fL = fP * ltv; rC = (fP * (1 - ltv)) + (fP * 0.03) + 1.4 + (fL * 0.0012); cashLeft = cash - rC;
+            document.getElementById('resBuyLabel').innerText = "建議購屋總價"; document.getElementById('resBuyVal').innerText = Math.round(fP) + " 萬";
+        } else {
+            fP = parseFloat(document.getElementById('buy_target').value)||0; fL = fP * ltv;
+            rC = (fP * (1 - ltv)) + (fP * 0.03) + 1.4 + (fL * 0.0012);
+            document.getElementById('resBuyLabel').innerText = "預估需備現金"; document.getElementById('resBuyVal').innerText = Math.round(rC) + " 萬";
+        }
+        const areas = Array.from(document.querySelectorAll('.area-tag.active')).map(t => t.innerText);
+        buyRes = { fP:Math.round(fP), fL:Math.round(fL), nPay:Math.round(fL*10000*fact), gPay:Math.round(fL*10000*(rate/12)), rC:Math.round(rC), mode:currentBuyMode, area:areas.join(', '), years };
+        document.getElementById('areaB').style.display = 'block';
+        document.getElementById('resExplainBuy').innerText = `【精算】總價：${buyRes.fP}萬 / 月繳：${buyRes.nPay.toLocaleString()}元 / 寬限月付：${buyRes.gPay.toLocaleString()}元 / 需備現金：約${buyRes.rC}萬\n(包含代書開辦費約1.4萬+設定規費0.12%)`;
     }
 
-    function adminUnlock() { entranceCounter++; if(entranceCounter >= 3) { entranceCounter=0; if(prompt("最高權限：")==="Simba") { document.getElementById('lock-screen').style.display='none'; document.getElementById('adminPanel').style.display='block'; refreshAdminUsers(); refreshLeads(); } } }
-    function trackEntranceClick() { entranceCounter++; if(entranceCounter >= 3) { entranceCounter=0; if(prompt("後台：")==="Simba") { document.getElementById('adminPanel').style.display='block'; refreshAdminUsers(); refreshLeads(); } } }
-    function refreshAdminUsers() { db.ref('users').once('value', (s) => { const u=s.val(); let h=""; if(!u) return; Object.keys(u).forEach(p => { const lock = u[p].deviceId ? '(鎖定)' : '(空)'; h+=`<div class="user-list-item"><b>${u[p].name}</b> (${p}) ${lock}<br><select onchange="db.ref('users/${p}').update({tier:this.value, status:(this.value==='blocked'?'blocked':'active')})"><option value="普通版" ${u[p].tier==='普通版'?'selected':''}>普通版</option><option value="店長版" ${u[p].tier==='店長版'?'selected':''}>店長版</option><option value="blocked" ${u[p].status==='blocked'?'selected':''}>封鎖</option></select><div class="admin-btn-group"><button onclick="db.ref('users/${p}').update({deviceId:null});alert('已解綁');refreshAdminUsers();" class="admin-unbind-btn">解綁</button><button onclick="if(confirm('刪？'))db.ref('users/${p}').remove().then(()=>refreshAdminUsers());" class="admin-delete-btn">刪除</button></div></div>`; }); document.getElementById('userTable').innerHTML=h; }); }
-    function createNewUser() { const p=document.getElementById('adm_phone').value, n=document.getElementById('adm_name').value; if(p && n) db.ref('users/'+p).set({ name:n, status:'active', tier:'店長版' }).then(()=>refreshAdminUsers()); }
-    function refreshLeads() { db.ref('admin/leads').on('value', (s) => { const l=s.val()||{}; let h="<b>開發買方：</b><br>"; Object.keys(l).forEach(k => { h+=`<div class="lead-card" onclick="alert('客戶:${l[k].name}\\n手機:${l[k].phone}\\n區域:${l[k].area}')">${l[k].name} (${l[k].agentName}) <button style="float:right;color:red;border:none;background:none;" onclick="event.stopPropagation();db.ref('admin/leads/${k}').remove();">刪</button></div>`; }); document.getElementById('leadsList').innerHTML=h; }); }
-    function setAdminMode(n) { document.getElementById('admSection1').style.display=(n===1?'block':'none'); document.getElementById('admSection2').style.display=(n===2?'block':'none'); document.getElementById('admSection3').style.display=(n===3?'block':'none'); }
+    function adminUnlock() { entranceCounter++; if(entranceCounter >= 3) { entranceCounter=0; if(prompt("最高權限密語：")==="Simba") { document.getElementById('lock-screen').style.display='none'; document.getElementById('adminPanel').style.display='block'; refreshAdminUsers(); refreshLeads(); } } }
+    function trackEntranceClick() { entranceCounter++; if(entranceCounter >= 3) { entranceCounter=0; if(prompt("戰情令密語：")==="Simba") { document.getElementById('adminPanel').style.display='block'; refreshAdminUsers(); refreshLeads(); } } }
+    function refreshAdminUsers() { db.ref('users').once('value', (s) => { const u=s.val(); let h=""; if(!u) return; Object.keys(u).forEach(p => { const lock = u[p].deviceId ? '(鎖定)' : '(空)'; h+=`<div class="user-list-item"><b>${u[p].name}</b> (${p}) ${lock}<br><select onchange="db.ref('users/${p}').update({tier:this.value, status:(this.value==='blocked'?'blocked':'active')})"><option value="普通版" ${u[p].tier==='普通版'?'selected':''}>普通版</option><option value="店長版" ${u[p].tier==='店長版'?'selected':''}>店長版</option><option value="blocked" ${u[p].status==='blocked'?'selected':''}>封鎖</option></select><div class="admin-btn-group"><button onclick="db.ref('users/${p}').update({deviceId:null});alert('解綁成功');refreshAdminUsers();" class="admin-unbind-btn">解綁設備</button><button onclick="if(confirm('刪除？'))db.ref('users/${p}').remove().then(()=>refreshAdminUsers());" class="admin-delete-btn">刪除帳號</button></div></div>`; }); document.getElementById('userTable').innerHTML=h; }); }
+    function createNewUser() { const p=document.getElementById('adm_phone').value, n=document.getElementById('adm_name').value; if(p && n) db.ref('users/'+p).set({ name:n, status:'active', tier:'普通版' }).then(()=>refreshAdminUsers()); }
+    function publishMarquee() { db.ref('system/broadcast').set({ text: document.getElementById('adm_msg').value }); alert("✅ 公告更新"); }
+    function refreshLeads() { db.ref('admin/leads').on('value', (s) => { const l=s.val()||{}; let h="<b>開發雷達：</b><br>"; Object.keys(l).forEach(k => { h+=`<div class="lead-card" onclick="alert('客戶:${l[k].name}\\n手機:${l[k].phone}\\n區域:${l[k].area}')">${l[k].name} (${l[k].agentName}) <button style="float:right;color:red;border:none;background:none;" onclick="event.stopPropagation();db.ref('admin/leads/'+'${k}').remove();">刪</button></div>`; }); document.getElementById('leadsList').innerHTML=h; }); }
+    function exportLeads() { let csv = "業務,客戶,手機,區域,金額\n"; db.ref('admin/leads').once('value', (s) => { const leads = s.val(); if(!leads) return; Object.values(leads).forEach(l => csv += `${l.agentName},${l.name},${l.phone},${l.area||'N/A'},${l.data.cash||l.data.fP}\n`); const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' }); const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = "名單.csv"; link.click(); }); }
+    function setAdminMode(n) { document.querySelectorAll('.admin-tab').forEach((t,i)=>t.classList.toggle('active', i===(n-1))); document.getElementById('admSection1').style.display=(n===1?'block':'none'); document.getElementById('admSection2').style.display=(n===2?'block':'none'); document.getElementById('admSection3').style.display=(n===3?'block':'none'); }
+
     function switchTab(id, el) { document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active')); document.getElementById(id).classList.add('active'); document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active')); el.classList.add('active'); }
     function setBuyMode(m) { currentBuyMode=m; document.getElementById('btnModeB').classList.toggle('active', m==='budget'); document.getElementById('btnModeT').classList.toggle('active', m==='target'); document.getElementById('groupBudget').style.display=(m==='budget'?'block':'none'); document.getElementById('groupTarget').style.display=(m==='target'?'block':'none'); }
     function toggleCheck(id) { checks[id]=!checks[id]; document.getElementById('item_'+id).classList.toggle('active', checks[id]); if(id==='isRefund') document.getElementById('boxRefund').style.display=checks[id]?'block':'none'; }
     function toggleArea(el) { el.classList.toggle('active'); }
-    function saveAndSync(type) { const name=document.getElementById(type+'_cName').value, res=(type==='sell'?sellRes:buyRes); if(!name || !res) return; const areas=Array.from(document.querySelectorAll('.area-tag.active')).map(t=>t.innerText); const pk={name, type, data:res, area:areas.join(','), date:new Date().toLocaleDateString(), agentName:myData.name, agentPhone:myPhone}; db.ref(`users/${myPhone}/customers/${Date.now()}`).set(pk); db.ref(`admin/leads/${myPhone}_${Date.now()}`).set(pk); if(myData.tier==='店長版' && myData.email) emailjs.send("service_n8xoxi3","template_7byd3lk",{to_email:myData.email, client_name:name, summary:(res.cash||res.fP)+"萬", agent_name:myData.name}); alert("✅ 儲存成功"); refreshFolder(); }
-    function refreshFolder() { const list=document.getElementById('folderList'); list.innerHTML=""; if(!myData.customers) return; Object.keys(myData.customers).forEach(k=>{const c=myData.customers[k]; list.innerHTML+=`<div class="card" style="padding:15px; display:flex; justify-content:space-between; align-items:center;"><div><b>${c.name}</b></div><button onclick="viewClient('${k}')" style="background:var(--primary); color:#FFF; border:none; padding:8px 12px; border-radius:10px;">讀取</button></div>`;}); }
-    function viewClient(k) { const c=myData.customers[k]; if(!c) return; if(c.type==='sell') { switchTab('tab-sell', document.querySelectorAll('.nav-item')[0]); document.getElementById('sell_cName').value=c.name; doSell(); } else { switchTab('tab-buy', document.querySelectorAll('.nav-item')[1]); document.getElementById('buy_cName').value=c.name; doBuy(); } }
-    function saveProfile() { db.ref('users/'+myPhone).update({ name: document.getElementById('agentName').value, email: document.getElementById('agentEmail').value, phone: document.getElementById('agentPhone').value, photo: document.getElementById('profilePreview').src }); alert("✅ 同步成功"); }
+    function handleProfileUpload(i) { if (i.files && i.files[0]) { const r = new FileReader(); r.onload = (e) => document.getElementById('profilePreview').src = e.target.result; r.readAsDataURL(i.files[0]); } }
+    function saveProfile() { db.ref('users/'+myPhone).update({ name: document.getElementById('agentName').value, email: document.getElementById('agentEmail').value, phone: document.getElementById('agentPhone').value, photo: document.getElementById('profilePreview').src }); alert("✅ 形象同步"); }
     function loadProfile() { if(!myPhone) return; db.ref('users/'+myPhone).once('value', (s) => { const d=s.val(); if(d){ document.getElementById('agentName').value=d.name||""; document.getElementById('agentEmail').value=d.email||""; document.getElementById('agentPhone').value=d.phone||""; if(d.photo) document.getElementById('profilePreview').src=d.photo; } }); }
-    function showShareCard(type) { if(myData.tier==='普通版') { alert("❌ 普通版不支援 PDF"); return; } const cName=document.getElementById(type+'_cName').value||"客戶"; document.getElementById('cardClientTitle').innerText=cName+" 財務分析"; document.getElementById('cardAgentName').innerText=myData.name; document.getElementById('cardAgentPhone').innerText=myPhone; document.getElementById('cardAgentImg').src=document.getElementById('profilePreview').src; document.getElementById('shareCardModal').style.display='flex'; }
-    function downloadPDF() { html2pdf().set({ margin:1, filename:'報告.pdf', html2canvas:{scale:3}, jsPDF:{unit:'in', format:'letter'} }).from(document.getElementById('pdfContent')).save(); }
-    function handleProfileUpload(i) { if(i.files && i.files[0]) { const r=new FileReader(); r.onload=(e)=>document.getElementById('profilePreview').src=e.target.result; r.readAsDataURL(i.files[0]); } }
+    function refreshFolder() { const list = document.getElementById('folderList'); list.innerHTML = ""; if(!myData.customers) return; Object.keys(myData.customers).forEach(k => { const c = myData.customers[k]; list.innerHTML += `<div class="card" style="padding:15px; display:flex; justify-content:space-between; align-items:center;"><div><b>${c.name}</b></div><div><button onclick="viewClient('${k}')" style="background:var(--primary); color:#FFF; border:none; padding:8px 12px; border-radius:10px; margin-right:5px;">讀取</button><button onclick="if(confirm('刪？'))db.ref('users/${myPhone}/customers/${k}').remove();" style="background:var(--danger); color:#FFF; border:none; padding:8px 12px; border-radius:10px;">刪除</button></div></div>`; }); }
+    async function saveAndSync(type) { const name=document.getElementById(type+'_cName').value, res=(type==='sell'?sellRes:buyRes); if(!name || !res) return; const packet={name, type, data:res, date:new Date().toLocaleDateString(), agentName:myData.name, agentPhone:myPhone}; db.ref(`users/${myPhone}/customers/${Date.now()}`).set(packet); db.ref(`admin/leads/${myPhone}_${Date.now()}`).set(packet); if(myData.tier!=='普通版'&&myData.email) emailjs.send("service_n8xoxi3","template_7byd3lk",{to_email:myData.email, client_name:name, summary:(res.cash||res.fP)+"萬", agent_name:myData.name}); alert("✅ 已儲存同步"); refreshFolder(); }
+    function viewClient(k) { const c=myData.customers[k]; if(!c) return; if(c.type==='sell') { switchTab('tab-sell', document.querySelectorAll('.nav-item')[0]); document.getElementById('sell_cName').value=c.name; doSell(); } else { switchTab('tab-buy', document.querySelectorAll('.nav-item')[1]); document.getElementById('buy_cName').value=c.name; doBuy(); } }
+    function showShareCard(type) { if(myData.tier==='普通版') { alert("❌ 普通版不支援 PDF"); return; } const cName = document.getElementById(type+'_cName').value || "客戶"; document.getElementById('cardClientTitle').innerText = `${cName} 財務分析`; document.getElementById('cardAgentName').innerText = myData.name; document.getElementById('cardAgentPhone').innerText = myPhone; document.getElementById('cardAgentImg').src = document.getElementById('profilePreview').src; const body = document.getElementById('cardBody'); const res = type === 'sell' ? sellRes : buyRes; if(type === 'sell') { body.innerHTML = `<div class="share-hero-box"><span>預計實際拿回</span><div style="font-size:2.3rem; font-weight:900; color:var(--primary);">$ ${res.cash} 萬</div></div><div class="share-detail-row"><span>稅後淨利</span><span>+${res.profit} 萬</span></div><div class="share-detail-row"><span>服務費(4%)</span><span>${res.fee} 萬</span></div>`; } else { body.innerHTML = `<div class="share-hero-box"><span>建議總價</span><div style="font-size:2.3rem; font-weight:900; color:var(--primary);">${res.fP} 萬</div></div><div class="share-detail-row"><span>月本息攤還</span><span>${res.nPay.toLocaleString()} 元</span></div><div class="share-detail-row"><span>寬限期利息</span><span>${res.gPay.toLocaleString()} 元</span></div><div class="share-detail-row"><span>需備現金</span><span>${res.rC} 萬</span></div>`; } document.getElementById('shareCardModal').style.display = 'flex'; }
+    function downloadPDF() { const element = document.getElementById('pdfContent'); html2pdf().set({ margin: 1, filename: '報告.pdf', html2canvas: { scale: 3, useCORS: true }, jsPDF: { unit: 'in', format: 'letter' } }).from(element).save(); }
+    function handleMarqueeClick() { if(window.marqueeLink) window.open(window.marqueeLink); }
 </script>
 </body>
 </html>
